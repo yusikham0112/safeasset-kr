@@ -37,7 +37,7 @@ export default async function RootLayout({ children }) {
             <h3>예치</h3>
           </Link>
           <div>
-            {session ? <UserInfo /> : <Link href={"/login"}>로그인</Link>}
+            <UserInfo />
           </div>
         </div>
         {children}
