@@ -1,0 +1,26 @@
+.deposit-container {
+  display: flex;
+  justify-content: center;
+}
+
+.deposit-form {
+  background-color: rgb(23, 45, 62);
+  width: 500px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 120px;
+}
+
+.deposit-form input {
+  margin: 0.5rem;
+  height: 2rem;
+  width: 15rem;
+}
+
+.deposit-form button {
+  margin: 0.5rem;
+  height: 3rem;
+  width: 8rem;
+}
