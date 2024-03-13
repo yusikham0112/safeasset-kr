@@ -51,6 +51,11 @@ export default function Trade() {
     }
   };
 
+  const getFirstData = async () => {
+    setPastOrder(await getPastOrder("BTCUSDT", "1m"));
+    setPastResult(await getPastResult("BTCUSDT", "1m"));
+  };
+
   const showAmountController = (amount) => {
     return (
       <AmountCotroller
@@ -81,7 +86,7 @@ export default function Trade() {
   };
 
   useEffect(() => {
-    getdata();
+    getFirstData();
     setInterval(() => {
       getdata();
     }, 1000);
