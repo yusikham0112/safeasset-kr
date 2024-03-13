@@ -81,6 +81,7 @@ export default function Trade() {
   };
 
   useEffect(() => {
+    getdata();
     setInterval(() => {
       getdata();
     }, 1000);
