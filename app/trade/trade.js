@@ -18,7 +18,7 @@ export default function Trade() {
   const [orderMin, setOrderMin] = useState(new Date().getMinutes());
   const [sec, setSec] = useState(new Date().getSeconds());
   const [isDisabled, setIsDisabled] = useState(true);
-  const [pastResult, setPastResult] = useState([]);
+  const [pastResult, setPastResult] = useState([1]);
   const [pastOrder, setPastOrder] = useState([]);
   const orderRef = useRef();
 

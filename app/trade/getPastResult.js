@@ -27,7 +27,9 @@ export async function getPastResult(symbol, interval) {
       }
     });
     return results;
-  } catch (e) {}
+  } catch (e) {
+    return ["error"];
+  }
 }
 
 function getDate(i) {
