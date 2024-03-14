@@ -18,5 +18,5 @@ export default async function handler(req, res) {
     .collection("user_cred")
     .updateOne({ id: session.user.id }, { $set: { last_ip: ip } });
 
-  return res.status(200).json({ msg: "Check" });
+  return res.status(200).json({ ip: ip });
 }
