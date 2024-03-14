@@ -1,6 +1,5 @@
 import { connectDB } from "@/util/db";
 import { getToken } from "next-auth/jwt";
-import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {
   const session = await getToken({ req });

@@ -21,7 +21,7 @@ export default function Signin() {
     if (result.error) {
       e.target.pw.value = "";
     } else {
-      const res = await axios.post(
+      const res = await axios.get(
         "/api/loginLog",
         {},
         { withCredentials: true }
