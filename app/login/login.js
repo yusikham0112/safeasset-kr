@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import "./login.css";
 import axios from "axios";
+import { postLog } from "./action";
 
 export default function Signin() {
   const router = useRouter();
@@ -21,10 +22,8 @@ export default function Signin() {
     if (result.error) {
       e.target.pw.value = "";
     } else {
-      await fetch("/api/loginLog")
-        .then((res) => res.json())
-        .then((data) => console.log(data));
-      // router.push("/");
+      const res = await axios.get("/api/getip");
+      postLog(res.data.ip);
     }
   };
   return (
