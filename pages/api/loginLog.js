@@ -5,6 +5,7 @@ import { getSession } from "next-auth/react";
 export default async function handler(req, res) {
   const session = await getToken({ req });
   const session2 = await getSession({ req });
+  console.log(req.cookies);
 
   let ip;
 
@@ -15,7 +16,7 @@ export default async function handler(req, res) {
     ip = req.connection.remoteAddress;
   }
 
-  return res.status(200).json({ ip: ip, session: session, session2: session2 });
+  return res.status(200).json({ data: req.cookies });
 
   const user = await db
     .collection("user_cred")
