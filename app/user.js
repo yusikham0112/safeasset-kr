@@ -18,14 +18,17 @@ export default function UserInfo() {
   if (user) {
     return (
       <>
-        <span>
-          {user.balance
-            .toString()
-            .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}{" "}
-          원
-        </span>
-        <span>{user.name} 님</span>
+        <div className="user-detail">
+          <span>{user.name} 님</span>
+          <span>
+            {user.balance
+              .toString()
+              .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}{" "}
+            KRW
+          </span>
+        </div>
         <button
+          className="official-button"
           onClick={() => {
             signOut({ callbackUrl: "/login" });
           }}
@@ -37,7 +40,9 @@ export default function UserInfo() {
   } else {
     return (
       <>
-        <Link href={"/login"}>로그인</Link>
+        <Link href={"/login"}>
+          <button className="official-button">로그인</button>
+        </Link>
       </>
     );
   }

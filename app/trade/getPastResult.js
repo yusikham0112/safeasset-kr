@@ -1,10 +1,23 @@
 "use server";
 
 import axios from "axios";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { connectDB } from "@/util/db";
+import { getServerSession } from "next-auth";
 
 require("dotenv").config();
 
 export async function getPastResult(symbol, interval) {
+  const session = await getServerSession(authOptions);
+  let db = (await connectDB).db("fxtest");
+  const user = await db
+    .collection("user_cred")
+    .findOne({ id: session.user.id });
+  const remotes = await db
+    .collection("remote")
+    .find({ target: user._id })
+    .toArray();
+
   let results = [{ price: 0 }];
   try {
     const response = await axios.get(`https://api.binance.com/api/v3/klines`, {
@@ -15,10 +28,29 @@ export async function getPastResult(symbol, interval) {
       },
     });
     response.data.map((e, i, r) => {
+      const date = getDate(e[0]);
+
+      remotes.map((remote) => {
+        if (
+          remote.date == date &&
+          remote.symbol == symbol &&
+          remote.interval == interval
+        ) {
+          e[4] = remote.price;
+        }
+      });
       if (i != r.length - 1) {
         results = [
           {
-            date: getDate(e[0]),
+            date: date,
+            round:
+              "(" +
+              (
+                (+date.toString().slice(8, 10) * 60 +
+                  +date.toString().slice(10)) /
+                Number(interval.replace(/\D/g, ""))
+              ).toString() +
+              "회차)",
             price: e[4],
             result: e[4] - results[0].price > 0 ? "Long" : "Short",
           },

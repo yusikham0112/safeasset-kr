@@ -250,7 +250,7 @@ function UserManagement() {
             <th>전화번호</th>
             <th>지점</th>
             <th>보유금</th>
-            <th>최근기기</th>
+            <th>최근IP</th>
             <th>상태</th>
             <th>Actions</th>
           </tr>
@@ -265,7 +265,7 @@ function UserManagement() {
               <td>{user.phone}</td>
               <td>{user.ref}</td>
               <td>{user.balance}</td>
-              <td></td>
+              <td>{user.last_ip}</td>
               <td>{user.status}</td>
               <td></td>
             </tr>

@@ -6,6 +6,7 @@ import TradingViewWidget from "./TradingViewWidget";
 import { Order } from "./action";
 import { getPastResult } from "./getPastResult";
 import { getPastOrder } from "./getPastOrder";
+import "./trade.css";
 
 require("dotenv").config();
 
@@ -220,7 +221,7 @@ export default function Trade() {
             <tbody>
               {pastResult.map((user, i) => (
                 <tr key={i}>
-                  <td>{dateFormConvert(user.date)}</td>
+                  <td>{user.round + dateFormConvert(user.date)}</td>
                   <td>
                     {parseFloat(user.price)
                       .toFixed(2)

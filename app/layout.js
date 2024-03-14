@@ -9,7 +9,7 @@ import Link from "next/link";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Sample",
+  title: "Fxtest",
   description: "Sample fxtest",
 };
 
@@ -27,20 +27,27 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <div className="navbar">
-          <Link href={"/"}>
-            <h1>LOGO</h1>
-          </Link>
-          <Link href={"/trade"}>
-            <h3>거래</h3>
-          </Link>
-          <Link href={"/deposit"}>
-            <h3>예치</h3>
-          </Link>
-          <div>
+          <div className="logo-tag">
+            <Link href={"/"}>LOGO</Link>
+            <Link href={"/trade"}>
+              <span>옵션거래</span>
+            </Link>
+            <Link href={"/trade"}>
+              <span>거래내역</span>
+            </Link>
+            <Link href={"/deposit"}>
+              <span>입출금</span>
+            </Link>
+            <Link href={"/deposit"}>
+              <span>고객센터</span>
+            </Link>
+          </div>
+          <div className="user-info">
             <UserInfo />
           </div>
         </div>
         {children}
+        <div className="footer">footer</div>
       </body>
     </html>
   );

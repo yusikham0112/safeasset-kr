@@ -16,21 +16,23 @@ export async function Order(amount, type, symbol, interval) {
   let orderDate = getDate(false, 1);
 
   let db = (await connectDB).db("fxtest");
-  const oid = await db.collection("user_cred").findOne({ id: session.user.id });
-  if (oid.balance - amount < 0) {
+  const user = await db
+    .collection("user_cred")
+    .findOne({ id: session.user.id });
+  if (user.balance - amount < 0) {
     return "보유하고 있는 금액이 부족합니다.";
   }
   result = await db.collection("user_cred").updateOne(
-    { _id: oid._id },
+    { _id: user._id },
     {
-      $set: { balance: oid.balance - amount },
+      $set: { balance: user.balance - amount },
     }
   );
   if (result == 0) {
     return "사용자 보유액 정보를 확인 할 수 없습니다.";
   }
   result = await db.collection("trade_order").insertOne({
-    orderer: oid._id,
+    orderer: user._id,
     symbol: symbol,
     interval: interval,
     type: type,
@@ -41,18 +43,17 @@ export async function Order(amount, type, symbol, interval) {
   if (result.acknowledged === false) {
     return "거래 주문을 등록하지 못했습니다.";
   }
-  orderCloser(orderDate, db, result.insertedId);
+  orderCloser(orderDate, db, result.insertedId, user);
   return "주문이 등록되었습니다.";
 }
 
-async function orderCloser(orderDate, db, id) {
+async function orderCloser(orderDate, db, id, user) {
   while (true) {
     if (orderDate < getDate()) {
       break;
     }
     await delay(100);
   }
-  console.log(process.env.RR_RATIO);
   const order = await db.collection("trade_order").findOne({ _id: id });
 
   let response, currentPrice, pastPrice;
@@ -65,7 +66,22 @@ async function orderCloser(orderDate, db, id) {
       },
     });
 
+    const remotes = await db
+      .collection("remote")
+      .find({ target: user._id })
+      .toArray();
+
     response.data.map((e) => {
+      remotes.map((remote) => {
+        if (
+          remote.date == getDate(e[0], 0) &&
+          remote.symbol == order.symbol &&
+          remote.interval == order.interval
+        ) {
+          console.log("Run");
+          e[4] = remote.price;
+        }
+      });
       if (getDate(e[0]) == order.date) {
         currentPrice = e[4];
       }

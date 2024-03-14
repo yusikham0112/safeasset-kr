@@ -44,8 +44,8 @@
 }
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 16, 35, 49;
-  --background-end-rgb: 16, 35, 49;
+  --background-start-rgb: 13, 28, 39;
+  --background-end-rgb: 13, 28, 39;
 
   --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
   --secondary-glow: linear-gradient(
@@ -109,182 +109,56 @@ html {
 .navbar {
   height: 60px;
   background-color: rgb(23, 45, 62);
-  margin: 1rem;
   display: flex;
   justify-content: space-between;
 }
 
-.trade-container {
-  display: flex;
-  margin: 1rem;
+.official-button {
+  width: 5rem;
+  height: 2.5rem;
+  background-color: rgb(7, 202, 141);
+  transition: background-color 0.2s;
+  border: 0;
+  border-radius: 8px;
+  margin: 0.5rem;
 }
 
-.chart-wrap {
-  flex-basis: 100%;
-  height: 500px;
-  margin-right: 1rem;
+.official-button:hover {
+  background-color: rgb(2, 124, 85);
 }
 
-.order-wrap {
-  width: 400px;
-  height: 500px;
-
+.logo-tag {
   display: flex;
+  align-items: center;
+}
+
+.logo-tag a {
+  margin: 0.5rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-detail {
+  display: flex;
+
   flex-direction: column;
 }
 
-.coin-info {
-  width: 100%;
+.user-detail span {
+  text-align: end;
+}
+
+.footer {
   background-color: rgb(23, 45, 62);
-  padding: 0.7rem 0.5rem;
-  display: flex;
-  justify-content: space-between;
+  margin-top: 2rem;
+  height: 360px;
 }
 
-.coin-info-wrap {
-  width: 50%;
-  font-size: 14px;
-}
-
-.coin-info-label {
-  font-size: 12px;
-  color: rgb(161, 161, 161);
-}
-
-.time-info {
-  margin-top: 1rem;
-  width: 100%;
-  background-color: rgb(23, 45, 62);
-  padding: 0.7rem 1.2rem;
-  font-size: 12px;
-}
-
-.time-wrap {
-  display: flex;
-}
-
-.time-label {
-  width: 80px;
-}
-
-.time-data {
-  width: 100%;
-  text-align: right;
-}
-
-.order-info {
-  height: 100%;
-  background-color: rgb(23, 45, 62);
-  margin-top: 1rem;
-  padding: 0.5rem;
-}
-
-.amount-wrap {
-  display: flex;
-  height: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.reset-button {
-  width: 30%;
-}
-
-.control-button {
-  width: 15%;
-}
-
-.control-amount {
-  width: 40%;
-  text-align: center;
-  padding: 6px;
-  background-color: rgb(47, 72, 92);
-}
-
-.long-button {
-  width: 50%;
-  height: 3rem;
-  background-color: rgb(10, 182, 123);
-  border: 0;
-  border-radius: 3px;
-}
-
-.short-button {
-  width: 50%;
-  height: 3rem;
-  background-color: rgb(225, 52, 71);
-  border: 0;
-  border-radius: 3px;
-}
-
-#order-amount {
-  width: 70%;
-  text-align: center;
-}
-
-.list-container {
-  display: flex;
-  margin: 1rem;
-}
-
-.past-result-wrap {
-  background-color: rgb(23, 45, 62);
-  height: 300px;
-  width: 45%;
-  margin-right: 1rem;
-  padding: 1rem;
-  overflow-y: auto;
-}
-
-.past-result-wrap table {
-  width: 100%;
-}
-
-.past-result-wrap td {
-  text-align: center;
-}
-
-.past-order-wrap {
-  background-color: rgb(23, 45, 62);
-  height: 300px;
-  width: 55%;
-  margin-right: 1rem;
-  padding: 1rem;
-  overflow-y: auto;
-}
-
-.past-order-wrap table {
-  width: 100%;
-}
-
-.past-order-wrap td {
-  text-align: center;
-}
-
-@media screen and (max-width: 767px) {
-  .trade-container {
-    flex-wrap: wrap-reverse;
-  }
-
-  .list-container {
-    flex-wrap: wrap-reverse;
-  }
-
-  .order-wrap {
-    width: 100%;
-  }
-
-  .chart-wrap {
-    margin: 0;
-    margin-top: 1rem;
-  }
-
-  .past-order-wrap {
-    width: 100%;
-  }
-
-  .past-result-wrap {
-    width: 100%;
-    margin: 0;
-    margin-top: 1rem;
-  }
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

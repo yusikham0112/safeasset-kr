@@ -3,6 +3,7 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import "./login.css";
+import axios from "axios";
 
 export default function Signin() {
   const router = useRouter();
@@ -20,7 +21,13 @@ export default function Signin() {
     if (result.error) {
       e.target.pw.value = "";
     } else {
-      router.push("/");
+      const res = await axios.post(
+        "/api/loginLog",
+        {},
+        { withCredentials: true }
+      );
+      console.log(res);
+      // router.push("/");
     }
   };
   return (

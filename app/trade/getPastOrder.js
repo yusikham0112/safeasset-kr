@@ -14,6 +14,7 @@ export async function getPastOrder(symbol, interval) {
     .collection("trade_order")
     .find({ orderer: user._id, symbol: symbol, interval: interval })
     .toArray();
+
   let datas = [];
   orders.map((e) => {
     const data = {
