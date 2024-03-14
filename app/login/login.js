@@ -21,12 +21,9 @@ export default function Signin() {
     if (result.error) {
       e.target.pw.value = "";
     } else {
-      const res = await axios.get(
-        "/api/loginLog",
-        {},
-        { withCredentials: true }
-      );
-      console.log(res);
+      await fetch("/api/loginLog")
+        .then((res) => res.json())
+        .then((data) => console.log(data));
       // router.push("/");
     }
   };

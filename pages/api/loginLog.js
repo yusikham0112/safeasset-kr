@@ -4,9 +4,10 @@ import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {
   const secret = process.env.NEXTAUTH_SECRET;
-  const session = await getToken({ req: req, secret: secret, raw: true });
-  const session2 = await getSession({ req: req, secret: secret, raw: true });
+  const session = await getToken({ req });
 
+  const session2 = await getSession({ req: req, secret: secret, raw: true });
+  console.log(req.headers.cookie);
   let ip;
 
   const db = (await connectDB).db("fxtest");
@@ -16,7 +17,9 @@ export default async function handler(req, res) {
     ip = req.connection.remoteAddress;
   }
 
-  return res.status(200).json({ session: session, session2: session2 });
+  return res
+    .status(200)
+    .json({ session: session, session2: session2, cookie: req.headers.cookie });
 
   const user = await db
     .collection("user_cred")
