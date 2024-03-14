@@ -3,9 +3,9 @@ import { getToken } from "next-auth/jwt";
 import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {
-  const session = await getToken({ req });
-  const session2 = await getSession({ req });
-  console.log(req.cookies);
+  const secret = process.env.NEXTAUTH_SECRET;
+  const session = await getToken({ req: req, secret: secret, raw: true });
+  const session2 = await getSession({ req: req, secret: secret, raw: true });
 
   let ip;
 
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     ip = req.connection.remoteAddress;
   }
 
-  return res.status(200).json({ data: req.cookies });
+  return res.status(200).json({ session: session, session2: session2 });
 
   const user = await db
     .collection("user_cred")
