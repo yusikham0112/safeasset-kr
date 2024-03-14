@@ -1,8 +1,10 @@
 import { connectDB } from "@/util/db";
 import { getToken } from "next-auth/jwt";
+import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {
   const session = await getToken({ req });
+  const session2 = await getSession({ req });
 
   let ip;
 
@@ -13,9 +15,9 @@ export default async function handler(req, res) {
     ip = req.connection.remoteAddress;
   }
 
+  return res.status(200).json({ ip: ip, session: session2 });
+
   const user = await db
     .collection("user_cred")
     .updateOne({ id: session.user.id }, { $set: { last_ip: ip } });
-
-  return res.status(200).json({ ip: ip });
 }
