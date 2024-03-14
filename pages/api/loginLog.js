@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     ip = req.connection.remoteAddress;
   }
 
-  return res.status(200).json({ ip: ip, session: session2 });
+  return res.status(200).json({ ip: ip, session: session, session2: session2 });
 
   const user = await db
     .collection("user_cred")
