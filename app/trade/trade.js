@@ -22,28 +22,46 @@ export default function Trade() {
   const [pastResult, setPastResult] = useState([1]);
   const [pastOrder, setPastOrder] = useState([]);
   const orderRef = useRef();
+  let symbol = "BTCUSDT";
+  let interval = "1";
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("symbol")) {
+    symbol = params.get("symbol");
+  }
+  if (params.get("interval")) {
+    interval = params.get("interval");
+  }
 
   const getdata = async () => {
     setOrderHour(new Date().getHours());
-    setOrderMin(new Date().getMinutes());
-    setSec(new Date().getSeconds());
-    if (new Date().getSeconds() < 50) {
-      setIsDisabled(false);
+
+    let minData;
+    if (new Date().getMinutes() % interval != 0) {
+      minData = Math.floor(new Date().getMinutes() / interval + 1) * interval;
+      setOrderMin(minData);
+      minData = (minData - new Date().getMinutes() - 1) * 60;
+      setSec(60 - new Date().getSeconds() + minData);
+      if (60 - new Date().getSeconds() + minData < 10) {
+        setIsDisabled(true);
+      } else {
+        setIsDisabled(false);
+      }
     } else {
-      setIsDisabled(true);
+      setOrderMin(new Date().getMinutes() + +interval);
+      setSec(60 - new Date().getSeconds() + 60 * (+interval - 1));
+      if (60 - new Date().getSeconds() + 60 * (+interval - 1) < 10) {
+        setIsDisabled(true);
+      } else {
+        setIsDisabled(false);
+      }
     }
+
     if (new Date().getSeconds() == 0) {
-      setPastOrder(await getPastOrder("BTCUSDT", "1m"));
-      setPastResult(await getPastResult("BTCUSDT", "1m"));
+      setPastOrder(await getPastOrder(symbol, interval + "m"));
+      setPastResult(await getPastResult(symbol, interval + "m"));
     }
-    if (new Date().getSeconds() == 20) {
-      setPastOrder(await getPastOrder("BTCUSDT", "1m"));
-      setPastResult(await getPastResult("BTCUSDT", "1m"));
-    }
-    if (new Date().getSeconds() == 40) {
-      setPastOrder(await getPastOrder("BTCUSDT", "1m"));
-      setPastResult(await getPastResult("BTCUSDT", "1m"));
-    }
+
     try {
       const data = await axios.get("/api/getprice");
       setPrice(Number(data.data).toFixed(2));
@@ -53,8 +71,8 @@ export default function Trade() {
   };
 
   const getFirstData = async () => {
-    setPastOrder(await getPastOrder("BTCUSDT", "1m"));
-    setPastResult(await getPastResult("BTCUSDT", "1m"));
+    setPastOrder(await getPastOrder(symbol, interval + "m"));
+    setPastResult(await getPastResult(symbol, interval + "m"));
   };
 
   const showAmountController = (amount) => {
@@ -108,7 +126,18 @@ export default function Trade() {
             />
             <div className="coin-info-wrap">
               <div>
-                <span>BTC 1분</span>
+                <span>{}</span>
+                <div class="dropdown">
+                  <button class="dropdown-button">
+                    {`${symbol} ${interval}분 ▼`}
+                  </button>
+                  <div class="dropdown-content">
+                    <a href="/trade?interval=1&symbol=BTCUSDT">BTCUSDT 1M</a>
+                    <a href="/trade?interval=2&symbol=BTCUSDT">BTCUSDT 2M</a>
+                    <a href="/trade?interval=3&symbol=BTCUSDT">BTCUSDT 3M</a>
+                    <a href="/trade?interval=5&symbol=BTCUSDT">BTCUSDT 5M</a>
+                  </div>
+                </div>
               </div>
               <div>
                 <span className="coin-info-label">거래량 </span> NaN
@@ -139,8 +168,8 @@ export default function Trade() {
               </div>
               <div className="time-data">
                 <span>
-                  {orderMin == 59 ? orderHour + 1 : orderHour}시
-                  {orderMin + 1 == 60 ? "00" : orderMin + 1}분
+                  {orderMin == 60 ? orderHour + 1 : orderHour}시
+                  {orderMin == 60 ? "00" : orderMin}분
                 </span>
               </div>
             </div>
@@ -149,7 +178,7 @@ export default function Trade() {
                 <span>남은 시간</span>
               </div>
               <div className="time-data">
-                <span>{60 - sec}초</span>
+                <span>{sec}초</span>
               </div>
             </div>
           </div>
@@ -186,7 +215,12 @@ export default function Trade() {
                 onClick={async () => {
                   orderRef.current.value = 0;
                   setOrderPrice(0);
-                  let msg = await Order(orderPrice, "long", "BTCUSDT", "1m");
+                  let msg = await Order(
+                    orderPrice,
+                    "long",
+                    symbol,
+                    interval + "m"
+                  );
                   console.log(msg);
                 }}
               >
@@ -198,7 +232,12 @@ export default function Trade() {
                 onClick={async () => {
                   orderRef.current.value = 0;
                   setOrderPrice(0);
-                  let msg = await Order(orderPrice, "short", "BTCUSDT", "1m");
+                  let msg = await Order(
+                    orderPrice,
+                    "short",
+                    symbol,
+                    interval + "m"
+                  );
                   console.log(msg);
                 }}
               >
@@ -214,7 +253,7 @@ export default function Trade() {
             <thead>
               <tr>
                 <th>거래시간</th>
-                <th>시가</th>
+                <th>종가</th>
                 <th>결과</th>
               </tr>
             </thead>
@@ -256,7 +295,7 @@ export default function Trade() {
             <tbody>
               {pastOrder.map((order, i) => (
                 <tr key={i}>
-                  <td>{dateFormConvert(order.date)}</td>
+                  <td>{order.round + dateFormConvert(order.date)}</td>
                   <td>
                     {order.amount
                       .toString()

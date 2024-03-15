@@ -23,13 +23,13 @@ export default function Admin() {
         >
           Admin1
         </span>
-        <div
+        <span
           onClick={() => {
             setPage(1);
           }}
         >
           회원관리
-        </div>
+        </span>
         <span
           onClick={() => {
             setPage(2);

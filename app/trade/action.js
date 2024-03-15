@@ -13,7 +13,11 @@ export async function Order(amount, type, symbol, interval) {
   if (new Date().getSeconds() > 49) {
     return "거래 가능한 시간이 아닙니다.";
   }
-  let orderDate = getDate(false, 1);
+  let currentMin = new Date().getMinutes();
+  let orderDate = getDate(
+    false,
+    +interval.slice(0, 1) - (currentMin % +interval.slice(0, 1))
+  );
 
   let db = (await connectDB).db("fxtest");
   const user = await db
@@ -61,8 +65,8 @@ async function orderCloser(orderDate, db, id, user) {
     response = await axios.get(`https://api.binance.com/api/v3/klines`, {
       params: {
         symbol: order.symbol,
-        interval: order.interval,
-        limit: 10,
+        interval: order.interval == "2m" ? "1m" : order.interval,
+        limit: 20,
       },
     });
 
@@ -85,7 +89,7 @@ async function orderCloser(orderDate, db, id, user) {
       if (getDate(e[0]) == order.date) {
         currentPrice = e[4];
       }
-      if (getDate(e[0]) == order.date - 1) {
+      if (getDate(e[0]) == order.date - +order.interval.slice(0, 1)) {
         pastPrice = e[4];
       }
     });

@@ -23,6 +23,13 @@ export async function getOrderList() {
     order.id = user.id;
     order.name = user.name;
     order.game =
+      "(" +
+      Math.floor(
+        (+order.date.toString().slice(8, 10) * 60 +
+          +order.date.toString().slice(10, 12)) /
+          +order.interval.slice(0, 1)
+      ).toString() +
+      " 회차)" +
       order.date.toString().slice(8, 10) +
       "시" +
       order.date.toString().slice(10, 12) +

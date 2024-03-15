@@ -5,9 +5,10 @@ import { getRemoteData, getUserInfo, postRemoteData } from "./action";
 
 export default function Result(props) {
   const [resultList, setResultList] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+
+  const [userInfo, setUserInfo] = useState({ id: "", name: "" });
   let symbol = "BTCUSDT";
   let interval = "1";
-  const [userInfo, setUserInfo] = useState({ id: "", name: "" });
   const params = new URLSearchParams(window.location.search);
 
   if (params.get("symbol")) {

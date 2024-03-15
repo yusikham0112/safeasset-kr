@@ -29,8 +29,18 @@ export async function getPastOrder(symbol, interval) {
             : "long"
           : "pending",
       date: e.date,
+      round:
+        "(" +
+        (
+          (+e.date.toString().slice(8, 10) * 60 +
+            +e.date.toString().slice(10)) /
+          Number(interval.replace(/\D/g, ""))
+        ).toString() +
+        "회차)",
     };
-    datas = [data, ...datas];
+    if (data.result != "pending") {
+      datas = [data, ...datas];
+    }
   });
   return datas;
 }

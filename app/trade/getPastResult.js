@@ -23,13 +23,15 @@ export async function getPastResult(symbol, interval) {
     const response = await axios.get(`https://api.binance.com/api/v3/klines`, {
       params: {
         symbol: symbol,
-        interval: interval,
-        limit: 21,
+        interval: interval == "2m" ? "1m" : interval,
+        limit: 41,
       },
     });
     response.data.map((e, i, r) => {
       const date = getDate(e[0]);
-
+      if (date % 2 != 0 && interval == "2m") {
+        return null;
+      }
       remotes.map((remote) => {
         if (
           remote.date == date &&
