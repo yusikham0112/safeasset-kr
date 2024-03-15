@@ -4,7 +4,19 @@ import { useEffect, useState } from "react";
 import { getRemoteData, getUserInfo, postRemoteData } from "./action";
 
 export default function Result(props) {
-  const [resultList, setResultList] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const [resultList, setResultList] = useState([
+    { date: 0 },
+    { date: 0 },
+    { date: 0 },
+    { date: 0 },
+    { date: 0 },
+    { date: 0 },
+    { date: 0 },
+    { date: 0 },
+    { date: 0 },
+    { date: 0 },
+  ]);
+  const [sec, setSec] = useState(0);
 
   const [userInfo, setUserInfo] = useState({ id: "", name: "" });
   let symbol = "BTCUSDT";
@@ -66,7 +78,10 @@ export default function Result(props) {
     getUI();
     setInterval(async () => {
       setList();
-    }, 500);
+    }, 1000);
+    setInterval(async () => {
+      setSec(60 - new Date().getSeconds());
+    }, 1000);
   }, []);
   props.id;
   return (
@@ -113,7 +128,13 @@ export default function Result(props) {
                 <td>{symbol}</td>
                 <td>{interval + "M"}</td>
                 <td>{result.result}</td>
-                <td>{result.sec}</td>
+                <td>
+                  {(+result.date.toString().slice(10, 12) -
+                    new Date().getMinutes()) *
+                    60 +
+                    sec +
+                    "초"}
+                </td>
                 <td>
                   <button
                     onClick={() => {
