@@ -24,6 +24,7 @@ export default function Signin() {
     } else {
       const res = await axios.get("/api/getip");
       postLog(res.data.ip);
+      router.push("/");
     }
   };
   return (

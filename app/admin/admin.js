@@ -6,7 +6,9 @@ import {
   getDWList,
   manageDWStatus,
   getOrderList,
+  editOrder,
 } from "./adminAPI";
+import Link from "next/link";
 
 export default function Admin() {
   const [page, setPage] = useState(0);
@@ -42,11 +44,19 @@ export default function Admin() {
         >
           주문내역
         </span>
+        <span
+          onClick={() => {
+            setPage(4);
+          }}
+        >
+          결과 관리
+        </span>
       </div>
       <div className="admin-container">
         {page == 1 ? <UserManagement /> : ""}
         {page == 2 ? <DepositWithdrawalManagement /> : ""}
         {page == 3 ? <OrderList /> : ""}
+        {page == 4 ? <ResultManagement /> : ""}
       </div>
     </>
   );
@@ -58,7 +68,9 @@ function OrderList() {
     setOrderList(await getOrderList());
   };
   useEffect(() => {
-    getOrders();
+    setInterval(() => {
+      getOrders();
+    }, 1000);
   }, []);
   return (
     <>
@@ -76,10 +88,9 @@ function OrderList() {
             <th>회원픽</th>
             <th>결과</th>
             <th>거래금액</th>
-            <th>거래전 보유금</th>
-            <th>거래후 보유금</th>
             <th>상태</th>
             <th>날짜</th>
+            <th>action</th>
           </tr>
         </thead>
         <tbody>
@@ -93,8 +104,6 @@ function OrderList() {
               <td>{order.type}</td>
               <td>{order.game_result}</td>
               <td>{order.amount}</td>
-              <td>?</td>
-              <td>?</td>
               <td>
                 {order.result == "gain"
                   ? "실현"
@@ -103,6 +112,23 @@ function OrderList() {
                   : "진행 중"}
               </td>
               <td>{dateFormConvert(order.date)}</td>
+              <td>
+                {order.result == "pending" ? (
+                  <button
+                    onClick={() => {
+                      let userInput = prompt(
+                        "수정할 거래금액을 입력해주세요.",
+                        order.amount
+                      );
+                      editOrder(order._id, userInput);
+                    }}
+                  >
+                    수정
+                  </button>
+                ) : (
+                  ""
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -218,6 +244,59 @@ function DepositWithdrawalManagement() {
                     ""
                   )}
                 </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+}
+
+function ResultManagement() {
+  const [userList, setUserList] = useState([]);
+  const getUser = async () => {
+    setUserList(await getUserList());
+  };
+  useEffect(() => {
+    getUser();
+  }, []);
+  return (
+    <>
+      <h2>총관리자 - 회원관리</h2>
+      <input></input>
+      <button>검색</button>
+      <table className="admin-table">
+        <thead>
+          <tr>
+            <th>유저번호</th>
+            <th>아이디</th>
+            <th>닉네임</th>
+            <th>이름</th>
+            <th>전화번호</th>
+            <th>지점</th>
+            <th>보유금</th>
+            <th>최근IP</th>
+            <th>상태</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {userList.map((user, i) => (
+            <tr key={i}>
+              <td>{user._id}</td>
+              <td>{user.id}</td>
+              <td>{user.nick}</td>
+              <td>{user.name}</td>
+              <td>{user.phone}</td>
+              <td>{user.ref}</td>
+              <td>{user.balance}</td>
+              <td>{user.last_ip}</td>
+              <td>{user.status}</td>
+              <td>
+                <Link href={"/admin/result/" + user._id}>
+                  <button>관리</button>
+                </Link>
               </td>
             </tr>
           ))}

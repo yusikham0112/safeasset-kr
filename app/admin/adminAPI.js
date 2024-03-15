@@ -47,12 +47,19 @@ export async function getUserList() {
   return list;
 }
 
+export async function editOrder(orderId, amount) {
+  const db = (await connectDB).db("fxtest");
+  let list = await db
+    .collection("trade_order")
+    .updateOne({ _id: new ObjectId(orderId) }, { $set: { amount: +amount } });
+}
+
 export async function getDWList() {
   const db = (await connectDB).db("fxtest");
   let DWList = await db
     .collection("deposit_withdrawl")
     .find()
-    .sort({ createdAt: -1 })
+    .sort({ _id: -1 })
     .toArray();
   let users = await db.collection("user_cred").find().toArray();
   users.map((user) => {
