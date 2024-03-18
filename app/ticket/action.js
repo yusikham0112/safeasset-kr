@@ -1,4 +1,5 @@
 "use server";
+process.env.TZ = "Asia/Seoul";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { connectDB } from "@/util/db";
 import { ObjectId } from "mongodb";

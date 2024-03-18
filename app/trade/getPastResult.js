@@ -1,4 +1,5 @@
 "use server";
+process.env.TZ = "Asia/Seoul";
 
 import axios from "axios";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";

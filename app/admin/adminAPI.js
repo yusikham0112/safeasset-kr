@@ -1,5 +1,5 @@
 "use server";
-
+process.env.TZ = "Asia/Seoul";
 import { connectDB } from "@/util/db";
 import { ObjectId } from "mongodb";
 
