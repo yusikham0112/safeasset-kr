@@ -9,6 +9,10 @@
   flex-direction: column;
 }
 
+.admin-navbar span {
+  cursor: pointer;
+}
+
 .admin-container {
   background-color: rgb(23, 45, 62);
   width: auto;

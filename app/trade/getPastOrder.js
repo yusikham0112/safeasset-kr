@@ -38,9 +38,7 @@ export async function getPastOrder(symbol, interval) {
         ).toString() +
         "회차)",
     };
-    if (data.result != "pending") {
-      datas = [data, ...datas];
-    }
+    datas = [data, ...datas];
   });
   return datas;
 }

@@ -1,22 +1,49 @@
 "use server";
 
-import axios from "axios";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { connectDB } from "@/util/db";
-import { getServerSession } from "next-auth";
+import axios from "axios";
+import { ObjectId } from "mongodb";
+
+export async function getUserInfo(userid) {
+  const db = (await connectDB).db("fxtest");
+  let user = await db
+    .collection("user_cred")
+    .findOne({ _id: new ObjectId(userid) });
+  user._id = userid;
+  return user;
+}
+
+export async function getRemoteData(symbol, interval, date) {
+  const db = (await connectDB).db("fxtest");
+  let remote = await db.collection("remote").findOne({
+    symbol: symbol,
+    interval: interval,
+    date: date,
+  });
+  if (remote) {
+    remote._id = id;
+    return remote.price;
+  }
+
+  return false;
+}
+
+export async function postRemoteData(symbol, interval, date, price) {
+  const db = (await connectDB).db("fxtest");
+  let remote = await db.collection("remote").insertOne({
+    symbol: symbol,
+    interval: interval,
+    date: date,
+    price: price,
+  });
+}
 
 require("dotenv").config();
 
-export async function getPastResult(symbol, interval) {
-  const session = await getServerSession(authOptions);
+export async function getFutureResult(symbol, interval) {
   let db = (await connectDB).db("fxtest");
-  const user = await db
-    .collection("user_cred")
-    .findOne({ id: session.user.id });
-  const remotes = await db
-    .collection("remote")
-    .find({ target: user._id })
-    .toArray();
+  interval = interval + "m";
+  const remotes = await db.collection("remote").find().toArray();
 
   let results = [{ price: 0 }];
   try {
@@ -27,6 +54,14 @@ export async function getPastResult(symbol, interval) {
         limit: 120,
       },
     });
+    for (let i = 0; i < 21; i++) {
+      let temp_interval;
+      temp_interval = interval == "2m" ? "1m" : interval;
+      response.data.push([
+        response.data[response.data.length - 1][0] +
+          60000 * +temp_interval.slice(0, 1),
+      ]);
+    }
     response.data.map((e, i, r) => {
       const date = getDate(e[0]);
       if (date % 2 != 0 && interval == "2m") {
@@ -65,6 +100,7 @@ export async function getPastResult(symbol, interval) {
         ];
       }
     });
+    console.log(results);
     return results;
   } catch (e) {
     console.log(e);

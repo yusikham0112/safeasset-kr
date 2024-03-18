@@ -7,6 +7,8 @@ import {
   manageDWStatus,
   getOrderList,
   editOrder,
+  getTicketList,
+  editTicket,
 } from "./adminAPI";
 import Link from "next/link";
 
@@ -49,6 +51,13 @@ export default function Admin() {
             setPage(4);
           }}
         >
+          1:1 문의
+        </span>
+        <span
+          onClick={() => {
+            setPage(4);
+          }}
+        >
           결과 관리
         </span>
       </div>
@@ -56,9 +65,125 @@ export default function Admin() {
         {page == 1 ? <UserManagement /> : ""}
         {page == 2 ? <DepositWithdrawalManagement /> : ""}
         {page == 3 ? <OrderList /> : ""}
-        {page == 4 ? <ResultManagement /> : ""}
+        {page == 4 ? <TicketManagement /> : ""}
+        {page == 5 ? <ResultManagement /> : ""}
       </div>
     </>
+  );
+}
+
+function TicketManagement() {
+  const [ticketList, setTicketList] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalTicket, setModalTicket] = useState("");
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    getTickets();
+  };
+
+  const getTickets = async () => {
+    setTicketList(await getTicketList());
+  };
+  useEffect(() => {
+    getTickets();
+  }, []);
+  return (
+    <>
+      {isModalOpen ? (
+        <TicketManagementModal ticket={modalTicket} closeModal={closeModal} />
+      ) : (
+        ""
+      )}
+      <h2>1:1 문의 관리</h2>
+      <input></input>
+      <button>검색</button>
+      <table className="admin-table">
+        <thead>
+          <tr>
+            <th>문의번호</th>
+            <th>아이디</th>
+            <th>닉네임</th>
+            <th>이름</th>
+            <th>문의일</th>
+            <th>제목</th>
+            <th>상태</th>
+            <th>관리</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ticketList.map((ticket, i) => (
+            <tr key={i}>
+              <td>{ticket._id}</td>
+              <td>{ticket.user.id}</td>
+              <td>{ticket.user.nick}</td>
+              <td>{ticket.user.name}</td>
+              <td>{dateFormConvert(ticket.date)}</td>
+              <td>{ticket.title}</td>
+              <td>{ticket.status}</td>
+              <td>
+                <button
+                  onClick={() => {
+                    openModal();
+                    setModalTicket(ticket);
+                  }}
+                >
+                  답변/수정
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+}
+
+function TicketManagementModal({ ticket, closeModal }) {
+  const [answer, setAnswer] = useState();
+
+  return (
+    <div className="modal">
+      <div className="modal-content">
+        <h2>1:1 문의 답변/수정 - {ticket._id}</h2>
+        <p>
+          | 문의 ID : {ticket.user.id} | 닉네임 : {ticket.user.nick} | 이름 :
+          {" " + ticket.user.name} | 상태 : {ticket.status} |
+        </p>
+        <p>제목 : {ticket.title}</p>
+        <p>내용 : {ticket.q}</p>
+        <div>
+          <textarea
+            placeholder="답변을 입력하세요."
+            defaultValue={ticket.a}
+            onChange={(e) => {
+              setAnswer(e.target.value);
+            }}
+          ></textarea>
+        </div>
+        <div className="button-box">
+          <button
+            onClick={() => {
+              closeModal();
+            }}
+          >
+            닫기
+          </button>
+          <button
+            onClick={() => {
+              editTicket(ticket, answer);
+              closeModal();
+            }}
+          >
+            제출
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 

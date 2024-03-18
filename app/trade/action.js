@@ -54,6 +54,7 @@ export async function Order(amount, type, symbol, interval) {
 async function orderCloser(orderDate, db, id, user) {
   while (true) {
     if (orderDate < getDate()) {
+      await delay(1000);
       break;
     }
     await delay(100);
@@ -66,16 +67,27 @@ async function orderCloser(orderDate, db, id, user) {
       params: {
         symbol: order.symbol,
         interval: order.interval == "2m" ? "1m" : order.interval,
-        limit: 20,
+        limit: 100,
       },
     });
+
+    let temp = [];
+    response.data.map((e) => {
+      const date = getDate(e[0]);
+      if (date % 2 != 0 && order.interval == "2m") {
+        return null;
+      }
+      temp.push(e);
+    });
+
+    response.data = temp;
 
     const remotes = await db
       .collection("remote")
       .find({ target: user._id })
       .toArray();
 
-    response.data.map((e) => {
+    response.data.map((e, i) => {
       remotes.map((remote) => {
         if (
           remote.date == getDate(e[0], 0) &&
@@ -87,10 +99,10 @@ async function orderCloser(orderDate, db, id, user) {
         }
       });
       if (getDate(e[0]) == order.date) {
-        currentPrice = e[4];
+        currentPrice = response.data[i - 90 / +order.interval.slice(0, 1)][4];
       }
       if (getDate(e[0]) == order.date - +order.interval.slice(0, 1)) {
-        pastPrice = e[4];
+        pastPrice = response.data[i - 90 / +order.interval.slice(0, 1)][4];
       }
     });
 

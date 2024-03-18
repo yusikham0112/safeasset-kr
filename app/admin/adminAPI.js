@@ -3,6 +3,42 @@
 import { connectDB } from "@/util/db";
 import { ObjectId } from "mongodb";
 
+export async function editTicket(ticket, a) {
+  const db = (await connectDB).db("fxtest");
+  await db
+    .collection("ticket")
+    .updateOne(
+      { _id: new ObjectId(ticket._id) },
+      { $set: { status: "답변완료", a: a } }
+    );
+
+  return 200;
+}
+
+export async function getTicketList() {
+  const db = (await connectDB).db("fxtest");
+  let tickets = await db
+    .collection("ticket")
+    .find()
+    .sort({ _id: -1 })
+    .toArray();
+  let users = await db.collection("user_cred").find().toArray();
+
+  users.map((user) => {
+    user._id = user._id.toString();
+  });
+
+  tickets.map((ticket, i) => {
+    ticket._id = ticket._id.toString();
+    users.map((user) => {
+      if (user._id == ticket.user) {
+        ticket.user = user;
+      }
+    });
+  });
+  return tickets;
+}
+
 export async function getOrderList() {
   const db = (await connectDB).db("fxtest");
   let orders = await db

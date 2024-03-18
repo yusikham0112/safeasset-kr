@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Inter, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import { getServerSession } from "next-auth";
 import { connectDB } from "@/util/db";
@@ -7,6 +7,10 @@ import UserInfo from "./user";
 import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
+const notoSansKr = Noto_Sans_KR({
+  weight: ["500"],
+  subsets: ["latin"],
+});
 
 export const metadata = {
   title: "Fxtest",
@@ -32,13 +36,13 @@ export default async function RootLayout({ children }) {
             <Link href={"/trade"}>
               <span>옵션거래</span>
             </Link>
-            <Link href={"/trade"}>
+            <Link href={"/trade?symbol=BTCUSDT&interval=1m"}>
               <span>거래내역</span>
             </Link>
             <Link href={"/deposit"}>
               <span>입출금</span>
             </Link>
-            <Link href={"/deposit"}>
+            <Link href={"/ticket"}>
               <span>고객센터</span>
             </Link>
           </div>

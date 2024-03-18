@@ -57,7 +57,7 @@ export default function Trade() {
       }
     }
 
-    if (new Date().getSeconds() == 0) {
+    if (new Date().getSeconds() == 3) {
       setPastOrder(await getPastOrder(symbol, interval + "m"));
       setPastResult(await getPastResult(symbol, interval + "m"));
     }
@@ -222,6 +222,7 @@ export default function Trade() {
                     interval + "m"
                   );
                   console.log(msg);
+                  getFirstData();
                 }}
               >
                 Long
@@ -239,6 +240,7 @@ export default function Trade() {
                     interval + "m"
                   );
                   console.log(msg);
+                  getFirstData();
                 }}
               >
                 Short
@@ -252,7 +254,7 @@ export default function Trade() {
           <table>
             <thead>
               <tr>
-                <th>거래시간</th>
+                <th>거래결과</th>
                 <th>종가</th>
                 <th>결과</th>
               </tr>
@@ -285,7 +287,7 @@ export default function Trade() {
           <table>
             <thead>
               <tr>
-                <th>거래시간</th>
+                <th>거래내역</th>
                 <th>금액</th>
                 <th>구분</th>
                 <th>결과</th>

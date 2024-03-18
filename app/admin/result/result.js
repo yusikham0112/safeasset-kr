@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getRemoteData, getUserInfo, postRemoteData } from "./action";
+import { getFutureResult, getRemoteData, postRemoteData } from "./action";
 
-export default function Result(props) {
+export default function Result() {
   const [resultList, setResultList] = useState([
     { date: 0 },
     { date: 0 },
@@ -18,7 +18,6 @@ export default function Result(props) {
   ]);
   const [sec, setSec] = useState(0);
 
-  const [userInfo, setUserInfo] = useState({ id: "", name: "" });
   let symbol = "BTCUSDT";
   let interval = "1";
   const params = new URLSearchParams(window.location.search);
@@ -30,52 +29,31 @@ export default function Result(props) {
     interval = params.get("interval");
   }
 
-  const getUI = async () => {
-    setUserInfo(await getUserInfo(props.id));
+  const getFR = async () => {
+    let temp_list = await getFutureResult(symbol, interval);
+    let result = [];
+    temp_list.map((e) => {
+      if (e.date >= getDate(false, 0, 1)) result = [e, ...result];
+    });
+    setResultList(result);
   };
 
   const setList = async () => {
-    console.log("run");
-    let tempList = [];
-    for (let i = 0; i < 10; i++) {
-      let temp = {
-        round: Math.trunc(
-          (+getDate(false, i, +interval).toString().slice(8, 10) * 60 +
-            +getDate(false, i, +interval).toString().slice(10)) /
-            +interval
-        ),
-        date: getDate(false, i, +interval),
-        result: "BINANCE",
-        sec: getSec(false, i, +interval).toString() + "초",
-      };
-      let data = await getRemoteData(
-        props.id,
-        symbol,
-        interval + "m",
-        temp.date
-      );
-      if (data) {
-        temp.result = data;
-      }
-      tempList.push(temp);
-    }
-
-    setResultList(tempList);
-    console.log(tempList);
+    let temp_list = await getFutureResult(symbol, interval);
+    let result = [];
+    temp_list.map((e) => {
+      if (e.date >= getDate(false, 0, 1)) result = [e, ...result];
+    });
+    setResultList(result);
+    console.log(result);
   };
 
   const postRemote = async (date, price) => {
-    const res = await postRemoteData(
-      props.id,
-      symbol,
-      interval + "m",
-      date,
-      price
-    );
+    const res = await postRemoteData(symbol, interval + "m", date, price);
   };
 
   useEffect(() => {
-    getUI();
+    getFR();
     setInterval(async () => {
       setList();
     }, 1000);
@@ -83,26 +61,26 @@ export default function Result(props) {
       setSec(60 - new Date().getSeconds());
     }, 1000);
   }, []);
-  props.id;
+  ("temp data");
   return (
     <>
-      <h2>결과관리 - {userInfo.id + " - " + userInfo.name}</h2>
+      <h2>결과관리</h2>
       <div>
         <button className={symbol == "BTCUSDT" ? "active-button" : ""}>
           BTC
         </button>
       </div>
       <div>
-        <a href={`/admin/result/${props.id}?symbol=${symbol}&interval=1`}>
+        <a href={`/admin/result?symbol=${symbol}&interval=1`}>
           <button className={interval == "1" ? "active-button" : ""}>1M</button>
         </a>
-        <a href={`/admin/result/${props.id}?symbol=${symbol}&interval=2`}>
+        <a href={`/admin/result?symbol=${symbol}&interval=2`}>
           <button className={interval == "2" ? "active-button" : ""}>2M</button>
         </a>
-        <a href={`/admin/result/${props.id}?symbol=${symbol}&interval=3`}>
+        <a href={`/admin/result?symbol=${symbol}&interval=3`}>
           <button className={interval == "3" ? "active-button" : ""}>3M</button>
         </a>
-        <a href={`/admin/result/${props.id}?symbol=${symbol}&interval=5`}>
+        <a href={`/admin/result?symbol=${symbol}&interval=5`}>
           <button className={interval == "5" ? "active-button" : ""}>5M</button>
         </a>
       </div>
@@ -129,9 +107,12 @@ export default function Result(props) {
                 <td>{interval + "M"}</td>
                 <td>{result.result}</td>
                 <td>
-                  {(+result.date.toString().slice(10, 12) -
-                    new Date().getMinutes()) *
-                    60 +
+                  {(+result.date.toString().slice(8, 10) -
+                    new Date().getHours()) *
+                    3600 +
+                    (+result.date.toString().slice(10, 12) -
+                      new Date().getMinutes()) *
+                      60 +
                     sec +
                     "초"}
                 </td>

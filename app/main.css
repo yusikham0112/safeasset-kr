@@ -1,0 +1,21 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  height: 400px; /* 부모 요소의 높이 설정 */
+}
+
+.logo {
+  font-size: 5rem;
+}
+
+.ment {
+  font-size: 2rem;
+}
+
+.root-button {
+  margin: 0.5rem;
+  height: 2.5rem;
+  width: 6rem;
+}
