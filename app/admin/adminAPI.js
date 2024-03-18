@@ -41,12 +41,12 @@ export async function getTicketList() {
 
 export async function getOrderList() {
   const db = (await connectDB).db("fxtest");
+  let users = await db.collection("user_cred").find().toArray();
   let orders = await db
     .collection("trade_order")
     .find()
     .sort({ _id: -1 })
     .toArray();
-  let users = await db.collection("user_cred").find().toArray();
 
   users.map((user) => {
     user._id = user._id.toString();

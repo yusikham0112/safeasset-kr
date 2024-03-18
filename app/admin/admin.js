@@ -13,7 +13,17 @@ import {
 import Link from "next/link";
 
 export default function Admin() {
+  let pageNum = 0;
   const [page, setPage] = useState(0);
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("page")) {
+    pageNum = +params.get("page");
+  }
+
+  useEffect(() => {
+    setPage(pageNum);
+  }, []);
 
   return (
     <>
@@ -53,13 +63,9 @@ export default function Admin() {
         >
           1:1 문의
         </span>
-        <span
-          onClick={() => {
-            setPage(4);
-          }}
-        >
-          결과 관리
-        </span>
+        <a href="/admin/result">
+          <span>결과 관리</span>
+        </a>
       </div>
       <div className="admin-container">
         {page == 1 ? <UserManagement /> : ""}
@@ -189,6 +195,8 @@ function TicketManagementModal({ ticket, closeModal }) {
 
 function OrderList() {
   const [orderList, setOrderList] = useState([]);
+  const [searchId, setSearchId] = useState();
+  const [search, setSearch] = useState();
   const getOrders = async () => {
     setOrderList(await getOrderList());
   };
@@ -200,8 +208,19 @@ function OrderList() {
   return (
     <>
       <h2>주문내역</h2>
-      <input></input>
-      <button>검색</button>
+      <input
+        placeholder="ID로 검색"
+        onChange={(e) => {
+          setSearch(e.target.value);
+        }}
+      ></input>
+      <button
+        onClick={() => {
+          setSearchId(search);
+        }}
+      >
+        검색
+      </button>
       <table className="admin-table">
         <thead>
           <tr>
@@ -219,43 +238,48 @@ function OrderList() {
           </tr>
         </thead>
         <tbody>
-          {orderList.map((order, i) => (
-            <tr key={i}>
-              <td>{orderList.length - i}</td>
-              <td>{order.id}</td>
-              <td>{order.name}</td>
-              <td>{order.symbol + "-" + order.interval}</td>
-              <td>{order.game}</td>
-              <td>{order.type}</td>
-              <td>{order.game_result}</td>
-              <td>{order.amount}</td>
-              <td>
-                {order.result == "gain"
-                  ? "실현"
-                  : order.result == "loss"
-                  ? "실격"
-                  : "진행 중"}
-              </td>
-              <td>{dateFormConvert(order.date)}</td>
-              <td>
-                {order.result == "pending" ? (
-                  <button
-                    onClick={() => {
-                      let userInput = prompt(
-                        "수정할 거래금액을 입력해주세요.",
-                        order.amount
-                      );
-                      editOrder(order._id, userInput);
-                    }}
-                  >
-                    수정
-                  </button>
-                ) : (
-                  ""
-                )}
-              </td>
-            </tr>
-          ))}
+          {orderList.map((order, i) => {
+            if (searchId && order.id != searchId) {
+              return null;
+            }
+            return (
+              <tr key={i}>
+                <td>{orderList.length - i}</td>
+                <td>{order.id}</td>
+                <td>{order.name}</td>
+                <td>{order.symbol + "-" + order.interval}</td>
+                <td>{order.game}</td>
+                <td>{order.type}</td>
+                <td>{order.game_result}</td>
+                <td>{order.amount}</td>
+                <td>
+                  {order.result == "gain"
+                    ? "실현"
+                    : order.result == "loss"
+                    ? "실격"
+                    : "진행 중"}
+                </td>
+                <td>{dateFormConvert(order.date)}</td>
+                <td>
+                  {order.result == "pending" ? (
+                    <button
+                      onClick={() => {
+                        let userInput = prompt(
+                          "수정할 거래금액을 입력해주세요.",
+                          order.amount
+                        );
+                        editOrder(order._id, userInput);
+                      }}
+                    >
+                      수정
+                    </button>
+                  ) : (
+                    ""
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </>
