@@ -1,9 +1,8 @@
 import { connectDB } from "@/util/db";
-import bcrypt from "bcrypt";
 
 export default async function handler(req, res) {
   if (req.method == "POST") {
-    req.body.pw = await bcrypt.hash(req.body.pw, 10);
+    req.body.pw;
     req.body.balance = 0;
     req.body.role = "user";
     let db = (await connectDB).db("fxtest");

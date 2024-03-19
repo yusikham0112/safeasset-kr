@@ -37,30 +37,55 @@ export default function Trade() {
     setOrderHour(new Date().getHours());
 
     let minData;
-    if (new Date().getMinutes() % interval != 0) {
-      minData = Math.floor(new Date().getMinutes() / interval + 1) * interval;
-      setOrderMin(minData);
-      minData = (minData - new Date().getMinutes() - 1) * 60;
-      setSec(60 - new Date().getSeconds() + minData);
-      if (60 - new Date().getSeconds() + minData < 10) {
+
+    if (new Date().getMinutes() % interval == 0) {
+      setOrderMin(new Date().getMinutes());
+      setSec(60 - new Date().getSeconds());
+      if (60 - new Date().getSeconds() < 30) {
         setIsDisabled(true);
       } else {
         setIsDisabled(false);
       }
     } else {
-      setOrderMin(new Date().getMinutes() + +interval);
-      setSec(60 - new Date().getSeconds() + 60 * (+interval - 1));
-      if (60 - new Date().getSeconds() + 60 * (+interval - 1) < 10) {
+      minData = Math.floor(new Date().getMinutes() / interval + 1) * interval;
+      setOrderMin(minData);
+      if (minData == 0) {
+        setOrderHour(new Date().getHours() + 1);
+      }
+      minData = (minData - new Date().getMinutes()) * 60;
+      setSec(60 - new Date().getSeconds() + minData);
+      if (60 - new Date().getSeconds() + minData < 30) {
         setIsDisabled(true);
       } else {
         setIsDisabled(false);
       }
     }
 
+    // if (new Date().getMinutes() % interval != 0) {
+    //   minData = Math.floor(new Date().getMinutes() / interval + 1) * interval;
+    //   setOrderMin(minData);
+    //   minData = (minData - new Date().getMinutes() - 1) * 60;
+    //   setSec(60 - new Date().getSeconds() + minData);
+    //   if (60 - new Date().getSeconds() + minData < 30) {
+    //     setIsDisabled(true);
+    //   } else {
+    //     setIsDisabled(false);
+    //   }
+    // } else {
+    //   setOrderMin(new Date().getMinutes() + +interval);
+    //   setSec(60 - new Date().getSeconds() + 60 * (+interval - 1));
+    //   if (60 - new Date().getSeconds() + 60 * (+interval - 1) < 30) {
+    //     setIsDisabled(true);
+    //   } else {
+    //     setIsDisabled(false);
+    //   }
+    // }
+
     if (new Date().getSeconds() == 3) {
-      setPastOrder(await getPastOrder(symbol, interval + "m"));
       setPastResult(await getPastResult(symbol, interval + "m"));
     }
+
+    setPastOrder(await getPastOrder(symbol, interval + "m"));
 
     try {
       const data = await axios.get("/api/getprice");
@@ -168,7 +193,18 @@ export default function Trade() {
               </div>
               <div className="time-data">
                 <span>
-                  {orderMin == 60 ? orderHour + 1 : orderHour}시
+                  {orderMin == 60 ? orderHour : orderHour}시
+                  {orderMin == 60 ? "00" : orderMin}분
+                </span>
+              </div>
+            </div>
+            <div className="time-wrap">
+              <div className="time-label">
+                <span>계약 회차</span>
+              </div>
+              <div className="time-data">
+                <span>
+                  {orderMin == 60 ? orderHour : orderHour}시
                   {orderMin == 60 ? "00" : orderMin}분
                 </span>
               </div>

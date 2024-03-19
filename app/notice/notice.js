@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { getTicketList } from "./action";
+import { getNotice } from "./action";
 import { useEffect, useState } from "react";
 
-export default function ticket() {
-  const [ticketList, setTicketList] = useState([]);
+export default function Notice() {
+  const [noticeList, setNoticeList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTicket, setModalTicket] = useState("");
+  const [modalNotice, setModalNotice] = useState("");
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -19,7 +19,7 @@ export default function ticket() {
   };
 
   const getList = async () => {
-    setTicketList(await getTicketList());
+    setNoticeList(await getNotice());
   };
 
   useEffect(() => {
@@ -29,74 +29,62 @@ export default function ticket() {
   return (
     <div className="deposit-container">
       {isModalOpen ? (
-        <TicketModal closeModal={closeModal} ticket={modalTicket} />
+        <NoticeModal closeModal={closeModal} notice={modalNotice} />
       ) : (
         ""
       )}
-      <h3>Help Center</h3>
-      <h1>1:1 문의</h1>
+      <h3>Notice</h3>
+      <h1>공지사항</h1>
       <div className="b-menu">
+        <div className="active-menu">공지사항</div>
         <div className="non-active-menu">
-          <Link href="/notice">공지사항</Link>
+          <Link href="/ticket">1:1 문의</Link>
         </div>
-        <div className="active-menu">1:1 문의</div>
       </div>
       <table className="ticket-table">
         <thead>
           <tr>
             <th>날짜</th>
             <th>제목</th>
-            <th>상태</th>
           </tr>
         </thead>
         <tbody>
-          {ticketList.length == 0 ? (
+          {noticeList.length == 0 ? (
             <tr>
               <td></td>
               <td>게시물이 없습니다.</td>
-              <td></td>
             </tr>
           ) : (
-            ticketList.map((ticket, i) => {
+            noticeList.map((notice, i) => {
               return (
                 <tr
                   key={i}
+                  notice
                   onClick={() => {
-                    setModalTicket(ticket);
+                    setModalNotice(notice);
                     openModal();
                   }}
                 >
-                  <td>{dateFormConvert(ticket.date)}</td>
-                  <td>{ticket.title}</td>
-                  <td>{ticket.status}</td>
+                  <td>{dateFormConvert(notice.date)}</td>
+                  <td>{notice.title}</td>
                 </tr>
               );
             })
           )}
         </tbody>
       </table>
-      <a href="/sendticket">
-        <button>문의하기</button>
-      </a>
     </div>
   );
 }
 
-function TicketModal({ closeModal, ticket }) {
+function NoticeModal({ closeModal, notice }) {
   return (
     <div className="modal">
       <div className="modal-content">
-        <p>{ticket.status}</p>
-        <h2>{ticket.title}</h2>
+        <h2>{notice.title}</h2>
+        <p>{dateFormConvert(notice.date)}</p>
 
-        <p>{dateFormConvert(ticket.date)}</p>
-        <p>{"내용 :"}</p>
-        <textarea value={ticket.q} readonly></textarea>
-        <p>{"답변 :"}</p>
-        <textarea
-          value={ticket.a ? ticket.a : "등록된 답변이 없습니다."}
-          readonly
-        ></textarea>
+        <textarea value={notice.content} readonly></textarea>
         <button onClick={closeModal} style={{ width: "6rem" }}>
           Close
         </button>
@@ -107,10 +95,7 @@ function TicketModal({ closeModal, ticket }) {
 
 function dateFormConvert(date) {
   date = date.toString();
-  return `${date.slice(0, 4)}/${date.slice(4, 6)}/${date.slice(
-    6,
-    8
-  )} ${date.slice(8, 10)}:${date.slice(10, 12)}`;
+  return `${date.slice(0, 4)}/${date.slice(4, 6)}/${date.slice(6, 8)}`;
 }
 
 function Modal() {}

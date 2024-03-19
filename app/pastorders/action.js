@@ -4,36 +4,33 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { connectDB } from "@/util/db";
 import { getServerSession } from "next-auth";
 
-export async function requestWithdrawl(amount) {
+export async function getPastOrderList() {
   const session = await getServerSession(authOptions);
   const db = (await connectDB).db("fxtest");
   const user = await db
     .collection("user_cred")
     .findOne({ id: session.user.id });
-  if (user.balance < amount) return false;
-  await db.collection("deposit_withdrawl").insertOne({
-    applicant: user._id,
-    amount: +amount,
-    type: "환급",
-    status: "승인대기중",
-    date: getDate(false, 0),
-  });
-  await db
-    .collection("user_cred")
-    .updateOne({ id: session.user.id }, { $inc: { balance: -amount } });
-  return true;
-}
+  const list = await db
+    .collection("trade_order")
+    .find({
+      orderer: user._id,
+    })
+    .sort({ _id: -1 })
+    .toArray();
+  list.map((e) => {
+    e._id = e._id.toString();
+    e.orderer = e.orderer.toString();
+    e.round =
+      "(" +
+      (
+        (+e.date.toString().slice(8, 10) * 60 + +e.date.toString().slice(10)) /
+        Number(e.interval.replace(/\D/g, ""))
+      ).toString() +
+      "회차)";
 
-export async function getFullbank() {
-  const session = await getServerSession(authOptions);
-  const db = (await connectDB).db("fxtest");
-  const user = await db
-    .collection("user_cred")
-    .findOne({ id: session.user.id });
-  return {
-    info: user.bank + " " + user.account + " " + user.holder,
-    balance: user.balance,
-  };
+    e.date = dateFormConvert(e.date);
+  });
+  return list;
 }
 
 function getDate(i, p) {
@@ -50,4 +47,21 @@ function getDate(i, p) {
   let mm = date.getMinutes();
   mm = mm > 9 ? mm.toString() : "0" + mm.toString();
   return Number(y + m + d + h + mm);
+}
+
+function dateFormConvert(date) {
+  if (date) {
+    const data = date.toString();
+    return (
+      data.slice(0, 4) +
+      "/" +
+      data.slice(4, 6) +
+      "/" +
+      data.slice(6, 8) +
+      " " +
+      data.slice(8, 10) +
+      ":" +
+      data.slice(10, 12)
+    );
+  }
 }

@@ -11,9 +11,6 @@ require("dotenv").config();
 export async function Order(amount, type, symbol, interval) {
   const session = await getServerSession(authOptions);
   let result;
-  if (new Date().getSeconds() > 49) {
-    return "거래 가능한 시간이 아닙니다.";
-  }
   let currentMin = new Date().getMinutes();
   let orderDate = getDate(
     false,

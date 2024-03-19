@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import("./main.css");
 
 export default function Home() {
@@ -12,8 +14,12 @@ export default function Home() {
           안전하게 투명한 시스템으로 빠르고 편리한 옵션 거래를 제공합니다.
         </div>
         <div>
-          <button className="root-button">거래하기</button>
-          <button className="root-button">회원가입</button>
+          <Link href={"/trade"}>
+            <button className="root-button">거래하기</button>
+          </Link>
+          <Link href={"/register"}>
+            <button className="root-button">회원가입</button>
+          </Link>
         </div>
       </div>
     </>

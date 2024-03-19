@@ -101,7 +101,6 @@ export async function getFutureResult(symbol, interval) {
         ];
       }
     });
-    console.log(results);
     return results;
   } catch (e) {
     console.log(e);

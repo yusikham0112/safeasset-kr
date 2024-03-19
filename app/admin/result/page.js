@@ -6,7 +6,7 @@ export default function result() {
     <>
       <div className="admin-navbar">
         <a href="/admin?page=0">
-          <span>Admin1</span>
+          <span>공지관리</span>
         </a>
         <a href="/admin?page=1">
           <span>회원관리</span>

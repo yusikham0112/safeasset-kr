@@ -33,16 +33,16 @@ export default async function RootLayout({ children }) {
         <div className="navbar">
           <div className="logo-tag">
             <Link href={"/"}>LOGO</Link>
-            <Link href={"/trade"}>
+            <Link href={"/trade?symbol=BTCUSDT&interval=1"}>
               <span>옵션거래</span>
             </Link>
-            <Link href={"/trade?symbol=BTCUSDT&interval=1m"}>
+            <Link href={"/pastorders"}>
               <span>거래내역</span>
             </Link>
             <Link href={"/deposit"}>
               <span>입출금</span>
             </Link>
-            <Link href={"/ticket"}>
+            <Link href={"/notice"}>
               <span>고객센터</span>
             </Link>
           </div>

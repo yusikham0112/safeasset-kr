@@ -42,7 +42,7 @@ export async function getPastResult(symbol, interval) {
           e[4] = remote.price;
         }
       });
-      if (i != r.length - 1 && response.data[i - 90 / +interval.slice(0, 1)]) {
+      if (response.data[i - 90 / +interval.slice(0, 1)]) {
         results = [
           {
             date: date,

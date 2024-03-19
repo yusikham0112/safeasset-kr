@@ -4,36 +4,26 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { connectDB } from "@/util/db";
 import { getServerSession } from "next-auth";
 
-export async function requestWithdrawl(amount) {
+export async function getDWList() {
   const session = await getServerSession(authOptions);
   const db = (await connectDB).db("fxtest");
   const user = await db
     .collection("user_cred")
     .findOne({ id: session.user.id });
-  if (user.balance < amount) return false;
-  await db.collection("deposit_withdrawl").insertOne({
-    applicant: user._id,
-    amount: +amount,
-    type: "환급",
-    status: "승인대기중",
-    date: getDate(false, 0),
+  const list = await db
+    .collection("deposit_withdrawl")
+    .find({
+      applicant: user._id,
+    })
+    .sort({ _id: -1 })
+    .toArray();
+  list.map((e) => {
+    e._id = e._id.toString();
+    e.applicant = e.applicant.toString();
+    e.date = getDate(e.date);
+    e.date = dateFormConvert(e.date);
   });
-  await db
-    .collection("user_cred")
-    .updateOne({ id: session.user.id }, { $inc: { balance: -amount } });
-  return true;
-}
-
-export async function getFullbank() {
-  const session = await getServerSession(authOptions);
-  const db = (await connectDB).db("fxtest");
-  const user = await db
-    .collection("user_cred")
-    .findOne({ id: session.user.id });
-  return {
-    info: user.bank + " " + user.account + " " + user.holder,
-    balance: user.balance,
-  };
+  return list;
 }
 
 function getDate(i, p) {
@@ -50,4 +40,21 @@ function getDate(i, p) {
   let mm = date.getMinutes();
   mm = mm > 9 ? mm.toString() : "0" + mm.toString();
   return Number(y + m + d + h + mm);
+}
+
+function dateFormConvert(date) {
+  if (date) {
+    const data = date.toString();
+    return (
+      data.slice(0, 4) +
+      "/" +
+      data.slice(4, 6) +
+      "/" +
+      data.slice(6, 8) +
+      " " +
+      data.slice(8, 10) +
+      ":" +
+      data.slice(10, 12)
+    );
+  }
 }

@@ -3,6 +3,99 @@ process.env.TZ = "Asia/Seoul";
 import { connectDB } from "@/util/db";
 import { ObjectId } from "mongodb";
 
+export async function getNotice() {
+  const db = (await connectDB).db("fxtest");
+  let list = await db.collection("notice").find().sort({ _id: -1 }).toArray();
+  list.map((e) => {
+    e._id = e._id.toString();
+  });
+  return list;
+}
+
+export async function changeOrderPosition(id, pos) {
+  pos = pos == "long" ? "short" : "long";
+  const db = (await connectDB).db("fxtest");
+  await db.collection("trade_order").updateOne(
+    { _id: new ObjectId(id) },
+    {
+      $set: {
+        type: pos,
+      },
+    }
+  );
+}
+
+export async function updateUserDetail(
+  id,
+  pw,
+  balance,
+  bank,
+  account,
+  holder,
+  ref
+) {
+  const db = (await connectDB).db("fxtest");
+  await db.collection("user_cred").updateOne(
+    { _id: new ObjectId(id) },
+    {
+      $set: {
+        pw: pw,
+        balance: balance,
+        bank: bank,
+        account: account,
+        holder: holder,
+        ref: ref,
+      },
+    }
+  );
+}
+
+export async function userStatusChagne(id, status) {
+  const db = (await connectDB).db("fxtest");
+  await db
+    .collection("user_cred")
+    .updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { status: status == "정상" ? "차단" : "정상" } }
+    );
+}
+
+export async function deleteNotice(id) {
+  const db = (await connectDB).db("fxtest");
+  await db.collection("notice").deleteOne({ _id: new ObjectId(id) });
+}
+
+export async function insertNotice(title, content) {
+  const db = (await connectDB).db("fxtest");
+  await db
+    .collection("notice")
+    .insertOne({ title: title, content: content, date: getDate(false, 0) });
+}
+
+function getDate(i, p) {
+  let date;
+  i ? (date = new Date(i)) : (date = new Date());
+  p ? date.setMinutes(date.getMinutes() + p) : "";
+  const y = date.getFullYear().toString();
+  let m = date.getMonth() + 1;
+  m = m > 9 ? m.toString() : "0" + m.toString();
+  let d = date.getDate();
+  d = d > 9 ? d.toString() : "0" + d.toString();
+  let h = date.getHours();
+  h = h > 9 ? h.toString() : "0" + h.toString();
+  let mm = date.getMinutes();
+  mm = mm > 9 ? mm.toString() : "0" + mm.toString();
+  return Number(y + m + d + h + mm);
+}
+
+export async function editNotice(id, content) {
+  console.log(id);
+  const db = (await connectDB).db("fxtest");
+  await db
+    .collection("notice")
+    .updateOne({ _id: new ObjectId(id) }, { $set: { content: content } });
+}
+
 export async function editTicket(ticket, a) {
   const db = (await connectDB).db("fxtest");
   await db
@@ -142,13 +235,6 @@ export async function manageDWStatus(dw_id, func) {
           $inc: { balance: dw.amount },
         }
       );
-    } else if (dw.type == "환급") {
-      await db.collection("user_cred").updateOne(
-        { _id: dw.applicant },
-        {
-          $inc: { balance: -dw.amount },
-        }
-      );
     }
 
     await db.collection("deposit_withdrawl").updateOne(
@@ -185,6 +271,14 @@ export async function manageDWStatus(dw_id, func) {
   }
 
   if (func == "거절" || (func == "취소" && dw.status == "승인대기중")) {
+    if (dw.type == "환급") {
+      await db.collection("user_cred").updateOne(
+        { _id: dw.applicant },
+        {
+          $inc: { balance: dw.amount },
+        }
+      );
+    }
     await db.collection("deposit_withdrawl").updateOne(
       { _id: dw._id },
       {

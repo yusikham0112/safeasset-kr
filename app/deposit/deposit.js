@@ -24,7 +24,9 @@ export default function Deposit() {
         <div className="non-active-menu">
           <Link href="/withdrawl">출금신청</Link>
         </div>
-        <div className="non-active-menu">입출금내역</div>
+        <div className="non-active-menu">
+          <Link href="/dwlist">입출금내역</Link>
+        </div>
       </div>
       <div
         className="input-label"
