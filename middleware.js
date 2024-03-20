@@ -1,9 +1,40 @@
+// import { NextResponse } from "next/server";
+// const jwt = require("jsonwebtoken");
+
+// // This function can be marked `async` if using `await` inside
+// export function middleware(request) {
+//   const privateKey = "qwer1234";
+//   let cookie = request.cookies.get("next-auth.session-token");
+
+//   if (request.nextUrl.pathname.startsWith("/trade")) {
+//     return NextResponse.redirect(new URL("/", request.url));
+//   }
+// }
+
+// // See "Matching Paths" below to learn more
+// export const config = {
+//   matcher: [
+//     "/trade",
+//     "/deposit",
+//     "/admin/:path*",
+//     "/withdrawl",
+//     "/dwlist",
+//     "/ticket",
+//     "/sendticket",
+//     "/pastorders",
+//     "/notice",
+//   ],
+// };
+
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
 export async function middleware(request) {
   const currentPath = request.nextUrl.pathname;
-  const token = await getToken({ req: request });
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
   const pathList = [
     "/trade",
     "/deposit",
