@@ -19,7 +19,7 @@ export default function Trade() {
   const [orderMin, setOrderMin] = useState(new Date().getMinutes());
   const [sec, setSec] = useState(new Date().getSeconds());
   const [isDisabled, setIsDisabled] = useState(true);
-  const [pastResult, setPastResult] = useState([1]);
+  const [pastResult, setPastResult] = useState([{ round: "0회차" }]);
   const [pastOrder, setPastOrder] = useState([]);
   const orderRef = useRef();
   let symbol = "BTCUSDT";
@@ -60,26 +60,6 @@ export default function Trade() {
         setIsDisabled(false);
       }
     }
-
-    // if (new Date().getMinutes() % interval != 0) {
-    //   minData = Math.floor(new Date().getMinutes() / interval + 1) * interval;
-    //   setOrderMin(minData);
-    //   minData = (minData - new Date().getMinutes() - 1) * 60;
-    //   setSec(60 - new Date().getSeconds() + minData);
-    //   if (60 - new Date().getSeconds() + minData < 30) {
-    //     setIsDisabled(true);
-    //   } else {
-    //     setIsDisabled(false);
-    //   }
-    // } else {
-    //   setOrderMin(new Date().getMinutes() + +interval);
-    //   setSec(60 - new Date().getSeconds() + 60 * (+interval - 1));
-    //   if (60 - new Date().getSeconds() + 60 * (+interval - 1) < 30) {
-    //     setIsDisabled(true);
-    //   } else {
-    //     setIsDisabled(false);
-    //   }
-    // }
 
     if (new Date().getSeconds() == 3) {
       setPastResult(await getPastResult(symbol, interval + "m"));
@@ -204,8 +184,7 @@ export default function Trade() {
               </div>
               <div className="time-data">
                 <span>
-                  {orderMin == 60 ? orderHour : orderHour}시
-                  {orderMin == 60 ? "00" : orderMin}분
+                  {+pastResult[0].round.replace(/\D/g, "") + 1 + " 회차"}
                 </span>
               </div>
             </div>

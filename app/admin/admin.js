@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   getUserList,
   getDWList,
@@ -16,6 +16,7 @@ import {
   editNotice,
   deleteNotice,
   insertNotice,
+  editBalance,
 } from "./adminAPI";
 import Link from "next/link";
 
@@ -223,17 +224,26 @@ function InsertNoticeModal({ closeModal }) {
 }
 
 function NoticeManagementModal({ notice, closeModal }) {
-  const [content, setContent] = useState();
+  const [content, setContent] = useState(notice.content);
+  const [date, setDate] = useState(notice.date);
 
-  const edit = async (newContent) => {
-    await editNotice(notice._id, newContent);
+  const edit = async (newContent, newDate) => {
+    await editNotice(notice._id, newContent, newDate);
   };
 
   return (
     <div className="modal">
       <div className="modal-content">
         <h2>공지사항 조회/수정 - {notice._id}</h2>
-        <p>{dateFormConvert(notice.date)}</p>
+        <input
+          type="number"
+          maxLength={12}
+          minLength={12}
+          defaultValue={notice.date}
+          onChange={(e) => {
+            setDate(e.target.value);
+          }}
+        ></input>
         <p>제목 : {notice.title}</p>
         <div>
           <textarea
@@ -254,7 +264,7 @@ function NoticeManagementModal({ notice, closeModal }) {
           </button>
           <button
             onClick={() => {
-              edit(content);
+              edit(content, date);
               closeModal();
             }}
           >
@@ -662,7 +672,7 @@ function ResultManagement() {
 function UserManagement() {
   const [userList, setUserList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userModal, setUserModal] = useState();
+  const [userModal, setUserModal] = useState(0);
   const [orderList, setOrderList] = useState([]);
   const [DWList, setDWList] = useState([]);
 
@@ -695,8 +705,6 @@ function UserManagement() {
     setData();
     setInterval(() => {
       getUser();
-    }, 10000);
-    setInterval(() => {
       setData();
     }, 1000);
   }, []);
@@ -705,7 +713,7 @@ function UserManagement() {
     <>
       {isModalOpen ? (
         <UserManagementModal
-          user={userModal}
+          user={userList[userModal]}
           orderList={orderList}
           DWList={DWList}
           closeModal={closeModal}
@@ -752,7 +760,7 @@ function UserManagement() {
                 </button>
                 <button
                   onClick={() => {
-                    setUserModal(user);
+                    setUserModal(i);
                     openModal();
                   }}
                 >
@@ -779,12 +787,22 @@ function UserManagementModal({ user, orderList, DWList, closeModal }) {
     updateUserDetail(...data);
   };
 
+  const edit = async (id, bal) => {
+    const msg = await editBalance(id, bal);
+    alert(msg);
+  };
+
   const editOrderAndShowPopup = async (id, input) => {
     await editOrder(id, input);
   };
 
   const changePosition = async (id, pos) => {
     await changeOrderPosition(id, pos);
+  };
+
+  const handleKeyDown = (event) => {
+    console.log(event);
+    setBalance(event.target.value); // input 요소의 값(value)을 변경합니다.
   };
 
   return (
@@ -820,13 +838,20 @@ function UserManagementModal({ user, orderList, DWList, closeModal }) {
             <tr>
               <th>잔액</th>
               <td>
-                <input
-                  type="number"
-                  defaultValue={user.balance}
-                  onChange={(e) => {
-                    setBalance(e.target.value);
+                {user.balance}
+                <button
+                  onClick={() => {
+                    let inputValue = prompt("+/-할 금액을 입력하세요.");
+                    while (inputValue !== null && isNaN(inputValue)) {
+                      inputValue = prompt(
+                        "+/-할 금액을 입력하세요. 숫자만 입력 가능합니다."
+                      );
+                    }
+                    edit(user._id, inputValue);
                   }}
-                ></input>
+                >
+                  + / -
+                </button>
               </td>
             </tr>
             <tr>

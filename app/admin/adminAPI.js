@@ -88,12 +88,15 @@ function getDate(i, p) {
   return Number(y + m + d + h + mm);
 }
 
-export async function editNotice(id, content) {
+export async function editNotice(id, content, date) {
   console.log(id);
   const db = (await connectDB).db("fxtest");
   await db
     .collection("notice")
-    .updateOne({ _id: new ObjectId(id) }, { $set: { content: content } });
+    .updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { content: content, date: date } }
+    );
 }
 
 export async function editTicket(ticket, a) {
@@ -183,9 +186,37 @@ export async function getUserList() {
   return list;
 }
 
+export async function getUserOne(id) {
+  const db = (await connectDB).db("fxtest");
+  let user = await db
+    .collection("user_cred")
+    .findOne({ _id: new ObjectId(id) });
+
+  user._id = user._id.toString();
+
+  return user;
+}
+
+export async function editBalance(id, amount) {
+  const db = (await connectDB).db("fxtest");
+
+  await db
+    .collection("user_cred")
+    .updateOne({ _id: new ObjectId(id) }, { $inc: { balance: +amount } });
+
+  return "잔액이 변경되었습니다.";
+}
+
 export async function editOrder(orderId, amount) {
   const db = (await connectDB).db("fxtest");
-  let list = await db
+  let order = await db
+    .collection("trade_order")
+    .findOne({ _id: new ObjectId(orderId) });
+  const diff = order.amount - +amount;
+  await db
+    .collection("user_cred")
+    .updateOne({ _id: order.orderer }, { $inc: { balance: diff } });
+  await db
     .collection("trade_order")
     .updateOne({ _id: new ObjectId(orderId) }, { $set: { amount: +amount } });
 }
