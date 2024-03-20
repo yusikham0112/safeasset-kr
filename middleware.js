@@ -16,6 +16,7 @@ export async function middleware(request) {
     "/ticket",
     "/sendticket",
     "/pastorders",
+    "/notice",
   ];
 
   // 경로 배열을 순회하면서 로그인이 필요한 페이지인지 확인
