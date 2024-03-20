@@ -1,31 +1,3 @@
-// import { NextResponse } from "next/server";
-// const jwt = require("jsonwebtoken");
-
-// // This function can be marked `async` if using `await` inside
-// export function middleware(request) {
-//   const privateKey = "qwer1234";
-//   let cookie = request.cookies.get("next-auth.session-token");
-
-//   if (request.nextUrl.pathname.startsWith("/trade")) {
-//     return NextResponse.redirect(new URL("/", request.url));
-//   }
-// }
-
-// // See "Matching Paths" below to learn more
-// export const config = {
-//   matcher: [
-//     "/trade",
-//     "/deposit",
-//     "/admin/:path*",
-//     "/withdrawl",
-//     "/dwlist",
-//     "/ticket",
-//     "/sendticket",
-//     "/pastorders",
-//     "/notice",
-//   ],
-// };
-
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
@@ -48,11 +20,9 @@ export async function middleware(request) {
 
   // 경로 배열을 순회하면서 로그인이 필요한 페이지인지 확인
   const requiresLogin = pathList.some((path) => currentPath.startsWith(path));
-  console.log(token);
 
   // 로그인이 필요한 페이지에 접근한 경우
   if (requiresLogin && !token) {
-    console.log("Could not get token");
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
