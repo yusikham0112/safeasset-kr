@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .deposit-form {
@@ -78,7 +79,8 @@ h1 {
 
 .b-menu {
   display: flex;
-  width: 30rem;
+  max-width: 30rem;
+  width: 100%;
 }
 
 .b-menu div {
@@ -108,7 +110,8 @@ h1 {
 }
 
 .ticket-table {
-  width: 500px;
+  width: 100%;
+  max-width: 30rem;
   border-collapse: collapse;
 }
 
@@ -116,6 +119,16 @@ th,
 td {
   text-align: center;
   cursor: pointer;
+}
+
+.modal-content textarea {
+  width: 100%;
+  min-width: 300px;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 40rem;
 }
 
 tr:hover {

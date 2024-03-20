@@ -97,9 +97,11 @@ function TicketModal({ closeModal, ticket }) {
           value={ticket.a ? ticket.a : "등록된 답변이 없습니다."}
           readonly
         ></textarea>
-        <button onClick={closeModal} style={{ width: "6rem" }}>
-          Close
-        </button>
+        <div>
+          <button onClick={closeModal} style={{ width: "6rem" }}>
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );

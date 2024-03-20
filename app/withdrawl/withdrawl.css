@@ -18,7 +18,7 @@
 
 .deposit-container input {
   height: 2.5rem;
-  width: 30rem;
+  width: 100%;
   margin-top: 0.5rem;
   border-radius: 0;
   border: 0;
@@ -49,6 +49,8 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
+  width: 100%;
+  max-width: 30rem;
 }
 
 .input-wrapper {
@@ -78,11 +80,12 @@ h1 {
 
 .b-menu {
   display: flex;
-  width: 30rem;
+  width: 100%;
+  max-width: 30rem;
 }
 
 .b-menu div {
-  width: 33%;
+  width: 33.33%;
   height: 4rem;
   display: flex;
   justify-content: center;
@@ -105,4 +108,8 @@ h1 {
   border-bottom-style: none;
   border-top-width: 2px;
   border-top-color: rgb(7, 202, 141);
+}
+
+.padding {
+  padding: 8px;
 }

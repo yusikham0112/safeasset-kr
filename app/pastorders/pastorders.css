@@ -108,7 +108,7 @@ h1 {
 }
 
 table {
-  width: 500px;
+  width: 100%;
 }
 
 td,
@@ -118,6 +118,8 @@ th {
 }
 
 .table-wrap {
+  width: 100%;
+  max-width: 40rem;
   height: 400px;
   background-color: rgb(35, 57, 73);
   padding: 8px;

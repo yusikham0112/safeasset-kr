@@ -12,10 +12,15 @@ export async function Order(amount, type, symbol, interval) {
   const session = await getServerSession(authOptions);
   let result;
   let currentMin = new Date().getMinutes();
-  let orderDate = getDate(
-    false,
-    +interval.slice(0, 1) - (currentMin % +interval.slice(0, 1))
-  );
+  let orderDate;
+  if (currentMin % +interval.slice(0, 1) == 0) {
+    orderDate = getDate(false);
+  } else {
+    orderDate = getDate(
+      false,
+      +interval.slice(0, 1) - (currentMin % +interval.slice(0, 1))
+    );
+  }
 
   let db = (await connectDB).db("fxtest");
   const user = await db

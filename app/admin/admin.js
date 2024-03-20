@@ -800,11 +800,6 @@ function UserManagementModal({ user, orderList, DWList, closeModal }) {
     await changeOrderPosition(id, pos);
   };
 
-  const handleKeyDown = (event) => {
-    console.log(event);
-    setBalance(event.target.value); // input 요소의 값(value)을 변경합니다.
-  };
-
   return (
     <div className="modal">
       <div className="modal-content">

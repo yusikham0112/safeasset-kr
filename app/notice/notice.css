@@ -78,7 +78,8 @@ h1 {
 
 .b-menu {
   display: flex;
-  width: 30rem;
+  max-width: 30rem;
+  width: 100%;
 }
 
 .b-menu div {
@@ -108,7 +109,8 @@ h1 {
 }
 
 .ticket-table {
-  width: 500px;
+  width: 100%;
+  max-width: 30rem;
   border-collapse: collapse;
 }
 

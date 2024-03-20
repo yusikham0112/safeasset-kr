@@ -20,7 +20,6 @@ export async function getDWList() {
   list.map((e) => {
     e._id = e._id.toString();
     e.applicant = e.applicant.toString();
-    e.date = getDate(e.date);
     e.date = dateFormConvert(e.date);
   });
   return list;

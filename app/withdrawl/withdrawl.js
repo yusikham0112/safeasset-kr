@@ -18,8 +18,8 @@ export default function Withdrawl() {
 
   return (
     <div className="deposit-container">
-      <h3>Deposit</h3>
-      <h1>입금신청</h1>
+      <h3>Withdrawl</h3>
+      <h1>출금신청</h1>
       <div className="b-menu">
         <div className="non-active-menu">
           <Link href="/deposit">입금신청</Link>
@@ -53,8 +53,10 @@ export default function Withdrawl() {
         </div>
       </div>
       <div className="input-label" readOnly>
-        <label>출금계좌</label>
-        <input value={bank.info} readOnly></input>
+        <div className="padding">
+          <label>출금계좌</label>
+          <input value={bank.info} readOnly></input>
+        </div>
       </div>
 
       <button

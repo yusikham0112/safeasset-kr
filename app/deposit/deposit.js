@@ -46,9 +46,15 @@ export default function Deposit() {
           <span>원</span>
         </div>
       </div>
-      <div className="input-label" readOnly>
-        <label>입금자명</label>
-        <input value={holder} readOnly></input>
+      <div
+        className="input-label"
+        style={{ padding: "8px;", width: "100%;" }}
+        readOnly
+      >
+        <div className="padding">
+          <label>입금자명</label>
+          <input value={holder} readOnly></input>
+        </div>
       </div>
 
       <button
