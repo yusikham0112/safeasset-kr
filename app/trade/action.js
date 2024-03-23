@@ -77,7 +77,7 @@ async function orderCloser(orderDate, db, id, user) {
     let temp = [];
     response.data.map((e) => {
       const date = getDate(e[0]);
-      if (date % 2 != 0 && order.interval == "2m") {
+      if (date % 2 == 1 && order.interval == "2m") {
         return null;
       }
       temp.push(e);
@@ -108,7 +108,7 @@ async function orderCloser(orderDate, db, id, user) {
         pastPrice = response.data[i - 90 / +order.interval.slice(0, 1)][4];
       }
     });
-
+    console.log([currentPrice, pastPrice]);
     const result = currentPrice - pastPrice > 0 ? "long" : "short";
     if (order.type == result) {
       await db

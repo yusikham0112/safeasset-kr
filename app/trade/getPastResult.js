@@ -21,18 +21,27 @@ export async function getPastResult(symbol, interval) {
 
   let results = [{ price: 0 }];
   try {
-    const response = await axios.get(`https://api.binance.com/api/v3/klines`, {
+    let response = await axios.get(`https://api.binance.com/api/v3/klines`, {
       params: {
         symbol: symbol,
         interval: interval == "2m" ? "1m" : interval,
         limit: 120,
       },
     });
-    response.data.map((e, i, r) => {
+
+    let temp = [];
+    response.data.map((e) => {
       const date = getDate(e[0]);
-      if (date % 2 != 0 && interval == "2m") {
+      if (date % 2 == 1 && interval == "2m") {
         return null;
       }
+      temp.push(e);
+    });
+
+    response.data = temp;
+    response.data.map((e, i, r) => {
+      const date = getDate(e[0]);
+
       remotes.map((remote) => {
         if (
           remote.date == date &&
@@ -42,7 +51,7 @@ export async function getPastResult(symbol, interval) {
           e[4] = remote.price;
         }
       });
-      if (response.data[i - 90 / +interval.slice(0, 1)]) {
+      if (date != getDate() && response.data[i - 90 / +interval.slice(0, 1)]) {
         results = [
           {
             date: date,

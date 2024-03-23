@@ -31,6 +31,7 @@ export default function Result() {
 
   const getFR = async () => {
     let temp_list = await getFutureResult(symbol, interval);
+    console.log(temp_list);
     let result = [];
     temp_list.map((e) => {
       if (e.date >= getDate(false, 0, 1)) result = [e, ...result];
@@ -40,6 +41,7 @@ export default function Result() {
 
   const setList = async () => {
     let temp_list = await getFutureResult(symbol, interval);
+
     let result = [];
     temp_list.map((e) => {
       if (e.date >= getDate(false, 0, 1)) result = [e, ...result];
