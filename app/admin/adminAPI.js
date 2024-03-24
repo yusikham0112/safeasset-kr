@@ -207,6 +207,16 @@ export async function editBalance(id, amount) {
   return "잔액이 변경되었습니다.";
 }
 
+export async function editRemote(id, amount) {
+  const db = (await connectDB).db("fxtest");
+
+  await db
+    .collection("user_cred")
+    .updateOne({ _id: new ObjectId(id) }, { $set: { remote: amount } });
+
+  return "배율이 변경되었습니다.";
+}
+
 export async function editOrder(orderId, amount) {
   const db = (await connectDB).db("fxtest");
   let order = await db

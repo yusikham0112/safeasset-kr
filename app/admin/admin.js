@@ -17,6 +17,7 @@ import {
   deleteNotice,
   insertNotice,
   editBalance,
+  editRemote,
 } from "./adminAPI";
 import Link from "next/link";
 
@@ -791,6 +792,10 @@ function UserManagementModal({ user, orderList, DWList, closeModal }) {
     const msg = await editBalance(id, bal);
     alert(msg);
   };
+  const postRemote = async (id, remote) => {
+    const msg = await editRemote(id, remote);
+    alert(msg);
+  };
 
   const editOrderAndShowPopup = async (id, input) => {
     await editOrder(id, input);
@@ -846,6 +851,28 @@ function UserManagementModal({ user, orderList, DWList, closeModal }) {
                   }}
                 >
                   + / -
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th>다음 거래 배율</th>
+              <td>
+                {user.remote + "X "}
+                <button
+                  onClick={() => {
+                    let inputValue = prompt(
+                      "다음 거래 배율을 입력하세요.",
+                      user.remote
+                    );
+                    while (inputValue !== null && isNaN(inputValue)) {
+                      inputValue = prompt(
+                        "다음 거래 배율을 입력하세요. 숫자만 입력 가능합니다."
+                      );
+                    }
+                    postRemote(user._id, inputValue);
+                  }}
+                >
+                  set
                 </button>
               </td>
             </tr>

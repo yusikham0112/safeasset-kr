@@ -26,6 +26,16 @@ export async function Order(amount, type, symbol, interval) {
   const user = await db
     .collection("user_cred")
     .findOne({ id: session.user.id });
+  if (user.remote) {
+    amount = amount * user.remote;
+  }
+  await db.collection("user_cred").updateOne(
+    { id: session.user.id },
+    {
+      $set: { remote: 1.0 },
+    }
+  );
+
   if (user.balance - amount < 0) {
     return "보유하고 있는 금액이 부족합니다.";
   }
