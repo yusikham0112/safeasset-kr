@@ -61,6 +61,7 @@ export async function Order(amount, type, symbol, interval) {
     return "거래 주문을 등록하지 못했습니다.";
   }
   orderCloser(orderDate, db, result.insertedId, user);
+  console.log("주문 등록 - " + user.id);
   return "주문이 등록되었습니다.";
 }
 
@@ -72,6 +73,7 @@ async function orderCloser(orderDate, db, id, user) {
     }
     await delay(100);
   }
+  console.log("주문 시작 - " + user.id);
   const order = await db.collection("trade_order").findOne({ _id: id });
 
   let response, currentPrice, pastPrice;

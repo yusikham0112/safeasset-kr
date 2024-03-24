@@ -408,7 +408,7 @@ function OrderList() {
   useEffect(() => {
     setInterval(() => {
       getOrders();
-    }, 1000);
+    }, 2000);
   }, []);
   return (
     <>
