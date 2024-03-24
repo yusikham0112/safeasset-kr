@@ -707,7 +707,7 @@ function UserManagement() {
     setInterval(() => {
       getUser();
       setData();
-    }, 1000);
+    }, 1500);
   }, []);
 
   return (

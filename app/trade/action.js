@@ -137,6 +137,7 @@ async function orderCloser(orderDate, db, id, user) {
         .collection("trade_order")
         .updateOne({ _id: id }, { $set: { result: "loss" } });
     }
+    console.log("주문 종료 - " + user.id);
   } catch (error) {
     console.log(`An error occurred: ${error}`);
   }
