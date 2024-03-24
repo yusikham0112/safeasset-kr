@@ -95,22 +95,22 @@ async function orderCloser(orderDate, db, id, user) {
 
     response.data = temp;
 
-    const remotes = await db
-      .collection("remote")
-      .find({ target: user._id })
-      .toArray();
+    // const remotes = await db
+    //   .collection("remote")
+    //   .find({ target: user._id })
+    //   .toArray();
 
     response.data.map((e, i) => {
-      remotes.map((remote) => {
-        if (
-          remote.date == getDate(e[0], 0) &&
-          remote.symbol == order.symbol &&
-          remote.interval == order.interval
-        ) {
-          console.log("Run");
-          e[4] = remote.price;
-        }
-      });
+      // remotes.map((remote) => {
+      //   if (
+      //     remote.date == getDate(e[0], 0) &&
+      //     remote.symbol == order.symbol &&
+      //     remote.interval == order.interval
+      //   ) {
+      //     console.log("Run");
+      //     e[4] = remote.price;
+      //   }
+      // });
       if (getDate(e[0]) == order.date) {
         currentPrice = response.data[i - 90 / +order.interval.slice(0, 1)][4];
       }

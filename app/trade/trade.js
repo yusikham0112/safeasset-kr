@@ -21,9 +21,7 @@ export default function Trade() {
   const [isDisabled, setIsDisabled] = useState(true);
   const [pastResult, setPastResult] = useState([{ round: "0회차" }]);
   const [pastOrder, setPastOrder] = useState([]);
-  let currentRound = "";
-  let pastRound = 10000;
-  let roundStack = 5;
+
   const orderRef = useRef();
   let symbol = "BTCUSDT";
   let interval = "1";
@@ -67,10 +65,8 @@ export default function Trade() {
     if (new Date().getSeconds() == 3 || new Date().getSeconds() == 5) {
       const resultData = await getPastResult(symbol, interval + "m");
       setPastResult(resultData);
-      currentRound = resultData[0].round;
-      // setPastOrder(await getPastOrder(symbol, interval + "m"));
     }
-
+    setPastOrder(await getPastOrder(symbol, interval + "m"));
     try {
       const data = await axios.get("/api/getprice");
       setPrice(Number(data.data).toFixed(2));
@@ -117,15 +113,6 @@ export default function Trade() {
     getFirstData();
     setInterval(() => {
       getdata();
-      if (pastRound != currentRound) {
-        getFirstData();
-        if (roundStack == 0) {
-          pastRound = currentRound;
-        }
-        roundStack -= 1;
-      } else {
-        roundStack = 5;
-      }
     }, 1000);
   }, []);
 
