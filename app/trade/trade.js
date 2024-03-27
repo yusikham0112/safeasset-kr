@@ -132,9 +132,9 @@ export default function Trade() {
         <div className="order-wrap">
           <div className="coin-info">
             <img
-              src="vercel.svg"
-              alt="My Happy SVG"
-              style={{ width: "33px" }}
+              src="btc.png"
+              alt="BTCUSDT"
+              style={{ width: "33px", height: "55px", marginRight: "0.5rem" }}
             />
             <div className="coin-info-wrap">
               <div>
