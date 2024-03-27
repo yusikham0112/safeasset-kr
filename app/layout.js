@@ -41,9 +41,9 @@ export default async function RootLayout({ children }) {
                 height={50} // 이미지의 높이
               />
             </Link>
-            <Link href={"/trade?symbol=BTCUSDT&interval=1"}>
+            <a href={"/trade?symbol=BTCUSDT&interval=1"}>
               <span>옵션거래</span>
-            </Link>
+            </a>
             <Link href={"/pastorders"}>
               <span>거래내역</span>
             </Link>

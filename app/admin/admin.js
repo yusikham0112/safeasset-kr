@@ -397,6 +397,7 @@ function OrderList() {
   const [orderList, setOrderList] = useState([]);
   const [searchId, setSearchId] = useState();
   const [search, setSearch] = useState();
+
   const getOrders = async () => {
     setOrderList(await getOrderList());
   };
@@ -786,11 +787,14 @@ function UserManagementModal({ user, orderList, DWList, closeModal }) {
   const [ref, setRef] = useState(user.ref);
   const [messageTitle, setMessageTitle] = useState();
   const [messageContent, setMessageContent] = useState();
-
+  const titleRef = useRef();
+  const contentRef = useRef();
   const sendMessage = async (id, title, content) => {
     console.log(title);
     const msg = await postUserMessage(id, title, content);
     alert(msg);
+    titleRef.current.value = "";
+    contentRef.current.value = "";
   };
 
   const update = async (data) => {
@@ -1065,12 +1069,14 @@ function UserManagementModal({ user, orderList, DWList, closeModal }) {
             >
               <h3>메세지 보내기</h3>
               <input
+                ref={titleRef}
                 placeholder="제목"
                 onChange={(e) => {
                   setMessageTitle(e.target.value);
                 }}
               ></input>
               <textarea
+                ref={contentRef}
                 placeholder="내용"
                 onChange={(e) => {
                   setMessageContent(e.target.value);

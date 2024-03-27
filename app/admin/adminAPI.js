@@ -191,7 +191,11 @@ export async function getOrderList() {
 
 export async function getUserList() {
   const db = (await connectDB).db("fxtest");
-  let list = await db.collection("user_cred").find().toArray();
+  let list = await db
+    .collection("user_cred")
+    .find()
+    .sort({ _id: -1 })
+    .toArray();
   list.map((e) => {
     e._id = e._id.toString();
   });
