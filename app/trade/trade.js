@@ -11,7 +11,7 @@ import "./trade.css";
 require("dotenv").config();
 
 export default function Trade() {
-  const [price, setPrice] = useState("NaN");
+  const [price, setPrice] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [percentColor, setPercentColor] = useState("red");
   const [orderPrice, setOrderPrice] = useState(0);
   const [userAmount, setUserAmount] = useState(7777777);
@@ -69,7 +69,14 @@ export default function Trade() {
     setPastOrder(await getPastOrder(symbol, interval + "m"));
     try {
       const data = await axios.get("/api/getprice");
-      setPrice(Number(data.data).toFixed(2));
+      let result = data.data;
+      result[6] = ((result[4] - result[1]) / result[1]) * 100;
+      if (result[6] < 0) {
+        setPercentColor("red");
+      } else {
+        setPercentColor("green");
+      }
+      setPrice(result);
     } catch (err) {
       console.log(err);
     }
@@ -145,24 +152,27 @@ export default function Trade() {
                 </div>
               </div>
               <div>
-                <span className="coin-info-label">거래량 </span> NaN
+                <span className="coin-info-label">거래량 </span>{" "}
+                {Number(price[5]).toFixed(2)}
               </div>
               <div>
-                <span className="coin-info-label">하한가 </span>
-                {price}
+                <span className="coin-info-label">저가 </span>
+                {Number(price[3]).toFixed(2)}
               </div>
             </div>
             <div className="coin-info-wrap">
               <div>
                 <span className="coin-info-label">현재가 </span>
-                {price}
+                {Number(price[4]).toFixed(2)}
               </div>
               <div>
-                <span style={{ color: percentColor }}>NaN% </span>
+                <span style={{ color: percentColor }}>
+                  {Number(price[6]).toFixed(2)}%{" "}
+                </span>
               </div>
               <div>
-                <span className="coin-info-label">상한가 </span>
-                {price}
+                <span className="coin-info-label">고가 </span>
+                {Number(price[2]).toFixed(2)}
               </div>
             </div>
           </div>
