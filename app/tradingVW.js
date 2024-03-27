@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 
-export default function TradingViewWidget() {
+export default function TradingViewWidget(props) {
   const container = useRef();
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function TradingViewWidget() {
     script.type = "text/javascript";
     // 위젯 설정
     script.innerHTML = JSON.stringify({
-      symbol: "BINANCE:BTCUSDT",
+      symbol: props.symbol,
       locale: "kr",
       dateRange: "3M",
       colorTheme: "dark",

@@ -30,10 +30,10 @@ export default function Home() {
         </div>
         <div className="flex-box">
           <div className="small-widget-container">
-            <TradingViewWidget />
+            <TradingViewWidget symbol="BINANCE:BTCUSDT" />
           </div>
           <div className="small-widget-container">
-            <TradingViewWidget />
+            <TradingViewWidget symbol="BINANCE:ETHUSDT" />
           </div>
         </div>
       </div>
