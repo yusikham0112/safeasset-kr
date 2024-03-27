@@ -33,13 +33,10 @@ export default function Notice() {
       ) : (
         ""
       )}
-      <h3>Notice</h3>
-      <h1>공지사항</h1>
+      <h3>Message</h3>
+      <h1>메세지</h1>
       <div className="b-menu">
-        <div className="active-menu">공지사항</div>
-        <div className="non-active-menu">
-          <a href="/ticket">1:1 문의</a>
-        </div>
+        <div className="active-menu">메세지</div>
       </div>
       <table className="ticket-table">
         <thead>

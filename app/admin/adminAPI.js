@@ -12,6 +12,18 @@ export async function getNotice() {
   return list;
 }
 
+export async function postUserMessage(id, title, content) {
+  console.log(title);
+  const db = (await connectDB).db("fxtest");
+  await db.collection("message").insertOne({
+    user: new ObjectId(id),
+    title: title,
+    content: content,
+    date: getDate(false, 0),
+  });
+  return "메세지가 전송되었습니다.";
+}
+
 export async function changeOrderPosition(id, pos) {
   pos = pos == "long" ? "short" : "long";
   const db = (await connectDB).db("fxtest");

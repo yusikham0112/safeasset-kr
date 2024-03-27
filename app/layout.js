@@ -5,6 +5,7 @@ import { connectDB } from "@/util/db";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import UserInfo from "./user";
 import Link from "next/link";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 const notoSansKr = Noto_Sans_KR({
@@ -32,7 +33,14 @@ export default async function RootLayout({ children }) {
       <body className={inter.className}>
         <div className="navbar">
           <div className="logo-tag">
-            <Link href={"/"}>LOGO</Link>
+            <Link href={"/"}>
+              <Image
+                src="/logofx.png" // `public` 폴더 기준 상대 경로
+                alt="logo"
+                width={70} // 이미지의 폭
+                height={50} // 이미지의 높이
+              />
+            </Link>
             <Link href={"/trade?symbol=BTCUSDT&interval=1"}>
               <span>옵션거래</span>
             </Link>
@@ -45,13 +53,32 @@ export default async function RootLayout({ children }) {
             <Link href={"/notice"}>
               <span>고객센터</span>
             </Link>
+            <Link href={"/message"}>
+              <span>메세지</span>
+            </Link>
           </div>
           <div className="user-info">
             <UserInfo />
           </div>
         </div>
         {children}
-        <div className="footer">footer</div>
+        <div className="footer">
+          <Image
+            src="/logofx.png" // `public` 폴더 기준 상대 경로
+            alt="logo"
+            width={150} // 이미지의 폭
+            height={100} // 이미지의 높이
+          />
+          <p>
+            대표이사 (주) 비봉에이엔씨 외1명
+            <br />
+            ISMS 인증 유효기간: 2023.10.17 ~ 2024.10.16
+            <br />
+            정보보호 공시 이행 유효기간 : 2023.09.07 ~ 2024.09.07
+            <br />
+            과학기술정보통신부 선정, 정보보호 투자/공시 우수 기관·단체
+          </p>
+        </div>
       </body>
     </html>
   );

@@ -124,11 +124,12 @@ td {
 .modal-content textarea {
   width: 100%;
   min-width: 300px;
+  height: 200px;
 }
 
 .modal-content {
   width: 100%;
-  max-width: 40rem;
+  max-width: 80rem;
 }
 
 tr:hover {

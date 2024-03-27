@@ -3,10 +3,12 @@
   flex-direction: column;
   justify-content: center; /* 가로 중앙 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
-  height: 400px; /* 부모 요소의 높이 설정 */
+  /* 부모 요소의 높이 설정 */
+  padding: 0.5rem;
 }
 
 .logo {
+  margin-top: 5rem;
   font-size: 5rem;
 }
 
@@ -21,4 +23,63 @@
   background-color: rgb(7, 202, 141);
   border: 0;
   border-radius: 8px;
+}
+
+.small-widget-container {
+  max-width: 600px;
+  width: 100%;
+  margin: 0.5rem;
+  height: 300px;
+}
+
+.flex-box {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.content-wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0.5rem;
+}
+
+.content-box {
+  width: 100%;
+  display: flex;
+  margin: 0.5rem;
+}
+
+.content-box h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.content-box p {
+  font-size: 14px;
+}
+
+.content-box div {
+  margin-left: 1rem;
+}
+
+.ment {
+  font-weight: bold;
+  font-size: 36px;
+}
+
+.sub {
+  font-size: 16px;
+  color: rgb(209 213 219);
+}
+
+@media screen and (max-width: 767px) {
+  .flex-box {
+    flex-direction: column;
+  }
 }

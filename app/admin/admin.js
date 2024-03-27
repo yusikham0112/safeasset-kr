@@ -18,6 +18,7 @@ import {
   insertNotice,
   editBalance,
   editRemote,
+  postUserMessage,
 } from "./adminAPI";
 import Link from "next/link";
 
@@ -783,6 +784,14 @@ function UserManagementModal({ user, orderList, DWList, closeModal }) {
   const [account, setAccount] = useState(user.account);
   const [holder, setHolder] = useState(user.holder);
   const [ref, setRef] = useState(user.ref);
+  const [messageTitle, setMessageTitle] = useState();
+  const [messageContent, setMessageContent] = useState();
+
+  const sendMessage = async (id, title, content) => {
+    console.log(title);
+    const msg = await postUserMessage(id, title, content);
+    alert(msg);
+  };
 
   const update = async (data) => {
     updateUserDetail(...data);
@@ -1020,35 +1029,61 @@ function UserManagementModal({ user, orderList, DWList, closeModal }) {
               </tbody>
             </table>
           </div>
+          <div>
+            <div className="scroll-wrap" style={{ height: "330px" }}>
+              <h3>입출금</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>날짜</th>
+                    <th>유형</th>
+                    <th>금액</th>
+                    <th>상태</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {DWList.map((order, i) => {
+                    if (order.applicant != user._id) {
+                      return null;
+                    }
 
-          <div className="scroll-wrap">
-            <h3>입출금</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>날짜</th>
-                  <th>유형</th>
-                  <th>금액</th>
-                  <th>상태</th>
-                </tr>
-              </thead>
-              <tbody>
-                {DWList.map((order, i) => {
-                  if (order.applicant != user._id) {
-                    return null;
-                  }
-
-                  return (
-                    <tr key={i}>
-                      <td>{dateFormConvert(order.date)}</td>
-                      <td>{order.type}</td>
-                      <td>{order.amount}</td>
-                      <td>{order.status}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                    return (
+                      <tr key={i}>
+                        <td>{dateFormConvert(order.date)}</td>
+                        <td>{order.type}</td>
+                        <td>{order.amount}</td>
+                        <td>{order.status}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div
+              className="scroll-wrap"
+              style={{ height: "330px", marginTop: "1rem" }}
+            >
+              <h3>메세지 보내기</h3>
+              <input
+                placeholder="제목"
+                onChange={(e) => {
+                  setMessageTitle(e.target.value);
+                }}
+              ></input>
+              <textarea
+                placeholder="내용"
+                onChange={(e) => {
+                  setMessageContent(e.target.value);
+                }}
+              ></textarea>
+              <button
+                onClick={() => {
+                  sendMessage(user._id, messageTitle, messageContent);
+                }}
+              >
+                전송
+              </button>
+            </div>
           </div>
         </div>
 
