@@ -154,6 +154,33 @@ html {
   text-align: end;
 }
 
+@media screen and (max-width: 767px) {
+  .navbar {
+    flex-direction: column;
+    height: 90px;
+    justify-content: left;
+  }
+  .logo-tag {
+    font-size: 14px;
+  }
+  .user-detail {
+    flex-direction: row;
+  }
+  .logo-tag a {
+    margin: 0 0.5rem;
+  }
+  .loginout-btn {
+    margin: 0;
+    height: 2rem;
+  }
+  .user-info {
+    justify-content: right;
+  }
+  .user-detail span {
+    margin-right: 0.5rem;
+  }
+}
+
 .footer {
   background-color: rgb(23, 45, 62);
   margin-top: 2rem;

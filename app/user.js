@@ -15,11 +15,19 @@ export default function UserInfo() {
       getUser();
     }, 1000);
   }, []);
-  if (user) {
+  if (!user) {
+    return (
+      <>
+        <Link href={"/login"}>
+          <button className="official-button loginout-btn">로그인</button>
+        </Link>
+      </>
+    );
+  } else {
     return (
       <>
         <div className="user-detail">
-          <span>{user.name} 님</span>
+          <span style={{ fontWeight: "bold" }}>{user.name} 님</span>
           <span>
             {user.balance
               .toString()
@@ -28,21 +36,13 @@ export default function UserInfo() {
           </span>
         </div>
         <button
-          className="official-button"
+          className="official-button loginout-btn"
           onClick={() => {
             signOut({ callbackUrl: "/login" });
           }}
         >
           로그아웃
         </button>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Link href={"/login"}>
-          <button className="official-button">로그인</button>
-        </Link>
       </>
     );
   }

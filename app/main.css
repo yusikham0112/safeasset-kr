@@ -76,10 +76,19 @@
 .sub {
   font-size: 16px;
   color: rgb(209 213 219);
+  margin-bottom: 1rem;
 }
 
 @media screen and (max-width: 767px) {
   .flex-box {
     flex-direction: column;
+  }
+
+  .sub {
+    font-size: 12px;
+  }
+
+  .ment {
+    font-size: 24px;
   }
 }
