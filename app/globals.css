@@ -159,6 +159,7 @@ html {
     flex-direction: column;
     height: 90px;
     justify-content: left;
+    padding-right: 0.5rem;
   }
   .logo-tag {
     font-size: 14px;
@@ -167,7 +168,10 @@ html {
     flex-direction: row;
   }
   .logo-tag a {
-    margin: 0 0.5rem;
+    margin: 0rem;
+  }
+  .logo-tag {
+    justify-content: space-between;
   }
   .loginout-btn {
     margin: 0;

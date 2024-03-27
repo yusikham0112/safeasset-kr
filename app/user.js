@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 
 export default function UserInfo() {
-  const [user, setUser] = useState({ balance: 0 });
+  const [user, setUser] = useState(false);
   const getUser = async () => {
     setUser(await getUserInfo());
   };
