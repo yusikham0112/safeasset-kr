@@ -14,8 +14,8 @@ const notoSansKr = Noto_Sans_KR({
 });
 
 export const metadata = {
-  title: "Fxtest",
-  description: "Sample fxtest",
+  title: "Safe Assets Korea",
+  description: "",
 };
 
 export default async function RootLayout({ children }) {
