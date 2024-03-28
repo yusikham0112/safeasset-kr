@@ -1,4 +1,3 @@
-import { binance } from "@/util/binance";
 import axios from "axios";
 
 export default async function handler(req, res) {
