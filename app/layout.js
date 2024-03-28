@@ -24,6 +24,7 @@ export default async function RootLayout({ children }) {
   if (session) {
     const db = (await connectDB).db("fxtest");
     user = await db.collection("user_cred").findOne({ id: session.user.id });
+    console.log(session.user);
     user.balance = user.balance
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");

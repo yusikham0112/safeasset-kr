@@ -13,5 +13,6 @@ export async function getUserInfo() {
   const user = await db
     .collection("user_cred")
     .findOne({ id: session.user.id });
+  console.log(user);
   return { name: user.name, balance: user.balance };
 }

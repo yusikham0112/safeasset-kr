@@ -22,6 +22,7 @@ export const authOptions = {
         let user = await db
           .collection("user_cred")
           .findOne({ id: credentials.id });
+        console.log(user);
         if (user.status != "정상") {
           console.log("승인되지 않음");
           return new Error("이 계정은 아직 승인되지 않았습니다.");
