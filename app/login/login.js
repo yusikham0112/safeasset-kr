@@ -20,6 +20,7 @@ export default function Signin() {
       redirect: false,
     });
     if (result.error) {
+      alert("승인된 아이디가 아니거나, 아이디 비밀번호가 일치하지 않습니다.");
       e.target.pw.value = "";
     } else {
       const res = await axios.get("/api/getip");

@@ -22,22 +22,17 @@ export const authOptions = {
         let user = await db
           .collection("user_cred")
           .findOne({ id: credentials.id });
-        console.log(user);
         if (user.status != "정상") {
           console.log("승인되지 않음");
-          return new Error("이 계정은 아직 승인되지 않았습니다.");
+          return NULL;
         }
         if (!user) {
           console.log("해당 이메일은 없음");
-          return new Error(
-            "등록되지 않은 아이디이거나, 비밀번호가 일치하지 않습니다."
-          );
+          return NULL;
         }
         if (credentials.pw != user.pw) {
           console.log("비번틀림");
-          return new Error(
-            "등록되지 않은 아이디이거나, 비밀번호가 일치하지 않습니다."
-          );
+          return NULL;
         }
         return user;
       },
